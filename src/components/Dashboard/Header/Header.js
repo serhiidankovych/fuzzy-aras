@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import { IoMenu } from "react-icons/io5";
 
-export default function Header() {
+export default function Header({ handleDisplaySetup }) {
   return (
     <Box>
       <AppBar
@@ -34,7 +34,7 @@ export default function Header() {
         >
           FUZZY ARAS
         </Typography>
-        <IconButton>
+        <IconButton onClick={handleDisplaySetup}>
           <IoMenu />
         </IconButton>
       </AppBar>

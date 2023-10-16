@@ -23,7 +23,7 @@ export default function ThemeContainer({ dashboard }) {
       },
     },
     typography: {
-      fontFamily: "Montserrat",
+      fontFamily: "Montserrat,Reenie Beanie",
     },
   });
   const backgroundStyles = {

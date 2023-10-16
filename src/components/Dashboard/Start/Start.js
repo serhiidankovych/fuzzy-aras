@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import { Button } from "@mui/material";
 import { IoArrowForwardCircleOutline } from "react-icons/io5";
 
-function Start() {
+function Start({ handleDisplaySetup }) {
   return (
     <>
       <Box>
@@ -29,7 +29,6 @@ function Start() {
               alignItems: "flex-start",
               justifyContent: " center",
               textAlign: "justify",
-
               gap: "7px",
             }}
           >
@@ -41,10 +40,14 @@ function Start() {
               alternatives as well as the ratio of each alternative to the ideal
               alternative
             </Typography>
+            <Typography variant="h5" sx={{ fontFamily: "Reenie Beanie" }}>
+              by Zavadskas and Turskis
+            </Typography>
             <Button
               variant="contained"
               color="gray"
               endIcon={<IoArrowForwardCircleOutline />}
+              onClick={handleDisplaySetup}
             >
               Get Started
             </Button>
