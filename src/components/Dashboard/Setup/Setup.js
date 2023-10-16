@@ -2,7 +2,8 @@ import React from "react";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 
-import Numbers from "./NumbersConfiguration";
+import NumbersConfiguration from "./NumbersConfiguration";
+import NameConfiguration from "./NameConfiguration";
 
 export default function Setup({ isSetupOpen, setIsSetupOpen }) {
   const [setupStep, setSetupStep] = React.useState(0);
@@ -11,13 +12,14 @@ export default function Setup({ isSetupOpen, setIsSetupOpen }) {
     if (step) {
       setSetupStep(setupStep + 1);
     } else {
-      setSetupStep(setupStep + 1);
+      setSetupStep(setupStep - 1);
     }
   };
 
   const setupMenu = (step) => {
     const steps = {
-      0: <Numbers handleSetupStep={handleSetupStep} />,
+      0: <NumbersConfiguration handleSetupStep={handleSetupStep} />,
+      1: <NameConfiguration handleSetupStep={handleSetupStep} />,
     };
     return steps[step];
   };
@@ -42,7 +44,6 @@ export default function Setup({ isSetupOpen, setIsSetupOpen }) {
       }}
       role="presentation"
     >
-      {setupStep}
       {setupMenu(setupStep)}
     </Box>
   );

@@ -27,6 +27,31 @@ export default function NumberConfiguration({ handleSetupStep }) {
 
   const dispatch = useDispatch();
 
+  const generateNamesArray = (prefix, count) => {
+    return Array.from(
+      { length: count },
+      (_, index) => `${prefix} ${index + 1}`
+    );
+  };
+
+  const generatedAlternativeNames = generateNamesArray(
+    "Alternative",
+    numberOfAlternatives
+  );
+  const generatedCriteriaNames = generateNamesArray(
+    "Criteria",
+    numberOfCriteria
+  );
+  const generatedLinguisticTermsForAlternativesNames = generateNamesArray(
+    "Linguistic term",
+    numberOfLinguisticTermsForAlternatives
+  );
+  const generatedLinguisticTermsForCriteriaNames = generateNamesArray(
+    "Linguistic term",
+    numberOfLinguisticTermsForCriteria
+  );
+  const generatedExpertsNames = generateNamesArray("Expert", numberOfExperts);
+
   const handleSetNumbers = () => {
     dispatch(
       setNumberConfiguration(
@@ -37,32 +62,6 @@ export default function NumberConfiguration({ handleSetupStep }) {
         numberOfExperts
       )
     );
-    generateNames();
-    handleSetupStep(true);
-  };
-
-  const generateNames = () => {
-    const generatedAlternativeNames = Array.from(
-      { length: numberOfAlternatives },
-      (_, index) => `Alternative ${index + 1}`
-    );
-    const generatedCriteriaNames = Array.from(
-      { length: numberOfCriteria },
-      (_, index) => `Criteria ${index + 1}`
-    );
-    const generatedLinguisticTermsForAlternativesNames = Array.from(
-      { length: numberOfLinguisticTermsForAlternatives },
-      (_, index) => `Linguistic term ${index + 1}`
-    );
-    const generatedLinguisticTermsForCriteriaNames = Array.from(
-      { length: numberOfLinguisticTermsForCriteria },
-      (_, index) => `Linguistic term ${index + 1}`
-    );
-    const generatedExpertsNames = Array.from(
-      { length: numberOfExperts },
-      (_, index) => `Expert ${index + 1}`
-    );
-
     dispatch(
       setNameConfiguration(
         [...generatedAlternativeNames],
@@ -72,11 +71,13 @@ export default function NumberConfiguration({ handleSetupStep }) {
         [...generatedExpertsNames]
       )
     );
+
+    handleSetupStep(true);
   };
 
   return (
     <>
-      <Typography variant="h6" sx={{ fontWeight: "900" }}>
+      <Typography variant="h6" sx={{ fontWeight: "900", textAlign: "center" }}>
         Provide input numbers
       </Typography>
       <Box

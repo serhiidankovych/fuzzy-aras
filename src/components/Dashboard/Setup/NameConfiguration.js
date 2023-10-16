@@ -1,43 +1,101 @@
-import React from "react";
+import * as React from "react";
+import { useSelector } from "react-redux";
+
+import Box from "@mui/material/Box";
+import Tab from "@mui/material/Tab";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import TabPanel from "@mui/lab/TabPanel";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import Box from "@mui/material/Box";
+
 import Typography from "@mui/material/Typography";
-import Tooltip from "@mui/material/Tooltip";
-import Slider from "@mui/material/Slider";
-
-import { IoArrowForward } from "react-icons/io5";
-
-import { useDispatch, useSelector } from "react-redux";
-import { setNumberConfiguration } from "../../../store/actions/numberConfigurationActions";
+import Stack from "@mui/material/Stack";
 
 export default function NameConfiguration({ handleSetupStep }) {
-  const [numberOfAlternatives, setNumberOfAlternatives] = React.useState(5);
-  const [numberOfCriteria, setNumberOfCriteria] = React.useState(8);
-  const [numberOfLinguisticTerms, setNumberOfLinguisticTerms] =
-    React.useState(5);
-  const [numberOfExperts, setNumberOfExperts] = React.useState(3);
-  const dispatch = useDispatch();
+  const [tab, setTab] = React.useState("1");
 
-  const handleSetNumbers = () => {
-    dispatch(
-      setNumberConfiguration(
-        numberOfAlternatives,
-        numberOfCriteria,
-        numberOfLinguisticTerms,
-        numberOfExperts
-      )
-    );
-    handleSetupStep(true);
+  const handleTabChange = (event, newValue) => {
+    setTab(newValue);
+  };
+
+  const [alternativeNames, setAlternativeNames] = React.useState([]);
+  const [criteriaNames, setCriteriaNames] = React.useState([]);
+  const [
+    linguisticTermsForAlternativesNames,
+    setLinguisticTermsForAlternativesNames,
+  ] = React.useState([]);
+  const [linguisticTermsForCriteriaNames, setLinguisticTermsForCriteriaNames] =
+    React.useState([]);
+  const [expertNames, setExpertNames] = React.useState([]);
+
+  //generated names
+  const names = useSelector((state) => state.nameConfiguration);
+
+  React.useEffect(() => {
+    if (names) {
+      setAlternativeNames(names.alternativeNames || []);
+      setCriteriaNames(names.criteriaNames || []);
+      setLinguisticTermsForAlternativesNames(
+        names.linguisticTermsForAlternativesNames || []
+      );
+      setLinguisticTermsForCriteriaNames(
+        names.linguisticTermsForCriteriaNames || []
+      );
+      setExpertNames(names.expertNames || []);
+    }
+  }, [names]);
+
+  const handleNameChange = (index, event, nameType) => {
+    if (nameType == "alternative") {
+      const updatedNames = [...alternativeNames];
+      updatedNames[index] = event.target.value;
+      setAlternativeNames(updatedNames);
+    }
+
+    if (nameType == "criteria") {
+      const updatedNames = [...criteriaNames];
+      updatedNames[index] = event.target.value;
+      setCriteriaNames(updatedNames);
+    }
+
+    if (nameType == "lt-alternative") {
+      const updatedNames = [...linguisticTermsForAlternativesNames];
+      updatedNames[index] = event.target.value;
+      setLinguisticTermsForAlternativesNames(updatedNames);
+    }
+    if (nameType == "lt-criteria") {
+      const updatedNames = [...linguisticTermsForCriteriaNames];
+      updatedNames[index] = event.target.value;
+      setLinguisticTermsForCriteriaNames(updatedNames);
+    }
+    if (nameType == "expert") {
+      const updatedNames = [...expertNames];
+      updatedNames[index] = event.target.value;
+      setExpertNames(updatedNames);
+    }
+  };
+
+  const renderNameInputs = (nameArray, nameType, handleNameChange) => {
+    return nameArray.map((name, index) => (
+      <TextField
+        id={`${nameType}${index + 1}`}
+        label={`${nameType}-${index + 1}`}
+        key={`${nameType}-${index}`}
+        value={name}
+        variant="outlined"
+        type="text"
+        onChange={(event) => handleNameChange(index, event, nameType)}
+      />
+    ));
   };
 
   return (
     <>
-      <Typography variant="h6" sx={{ fontWeight: "900" }}>
-        Provide input numbers
+      <Typography variant="h6" sx={{ fontWeight: "900", textAlign: "center" }}>
+        Provide input names
       </Typography>
       <Box
-        component="span"
         sx={{
           p: 1.5,
           border: "1px solid #d5d5d5",
@@ -47,148 +105,141 @@ export default function NameConfiguration({ handleSetupStep }) {
           gap: "8px",
         }}
       >
-        <Box
-          component="span"
-          sx={{
-            p: 1.5,
-            border: "1px solid #d5d5d5",
-            borderRadius: "8px",
-            display: "flex",
-            flexDirection: "column",
-            gap: "8px",
-          }}
-        >
-          <Typography id="alternatives-slider" gutterBottom>
-            Alternatives
-          </Typography>
-          <Slider
-            aria-labelledby="alternatives-slider"
-            value={numberOfAlternatives}
-            valueLabelDisplay="auto"
-            step={1}
-            marks
-            min={3}
-            max={10}
-            onChange={(e) => setNumberOfAlternatives(e.target.value)}
-            color="gray"
-          />
-        </Box>
-        <Box
-          component="span"
-          sx={{
-            p: 1.5,
-            border: "1px solid #d5d5d5",
-            borderRadius: "8px",
-            display: "flex",
-            flexDirection: "column",
-            gap: "8px",
-          }}
-        >
-          <Typography id="criteria-slider" gutterBottom>
-            Criteria
-          </Typography>
-          <Slider
-            aria-labelledby="criteria-slider"
-            value={numberOfCriteria}
-            valueLabelDisplay="auto"
-            step={1}
-            marks
-            min={3}
-            max={10}
-            onChange={(e) => setNumberOfCriteria(e.target.value)}
-            color="gray"
-          />
-        </Box>
-        <Box
-          component="span"
-          sx={{
-            p: 1.5,
-            border: "1px solid #d5d5d5",
-            borderRadius: "8px",
-            display: "flex",
-            flexDirection: "column",
-            gap: "8px",
-          }}
-        >
-          <Typography id="linguistic-terms-slider" gutterBottom>
-            Linguistic terms for alternatives
-          </Typography>
-          <Slider
-            aria-labelledby="linguistic-terms-slider"
-            value={numberOfLinguisticTerms}
-            valueLabelDisplay="auto"
-            step={1}
-            marks
-            min={3}
-            max={7}
-            onChange={(e) => setNumberOfLinguisticTerms(e.target.value)}
-            color="gray"
-          />
-        </Box>
-        <Box
-          component="span"
-          sx={{
-            p: 1.5,
-            border: "1px solid #d5d5d5",
-            borderRadius: "8px",
-            display: "flex",
-            flexDirection: "column",
-            gap: "8px",
-          }}
-        >
-          <Typography id="linguistic-terms-slider" gutterBottom>
-            Linguistic terms for criteria
-          </Typography>
-          <Slider
-            aria-labelledby="linguistic-terms-slider"
-            value={numberOfLinguisticTerms}
-            valueLabelDisplay="auto"
-            step={1}
-            marks
-            min={3}
-            max={7}
-            onChange={(e) => setNumberOfLinguisticTerms(e.target.value)}
-            color="gray"
-          />
-        </Box>
-        <Box
-          component="span"
-          sx={{
-            p: 1.5,
-            border: "1px solid #d5d5d5",
-            borderRadius: "8px",
-            display: "flex",
-            flexDirection: "column",
-            gap: "8px",
-          }}
-        >
-          <Typography id="experts-slider" gutterBottom>
-            Experts
-          </Typography>
-          <Slider
-            aria-labelledby="experts-slider"
-            value={numberOfExperts}
-            valueLabelDisplay="auto"
-            step={1}
-            marks
-            min={1}
-            max={5}
-            onChange={(e) => setNumberOfExperts(e.target.value)}
-            color="gray"
-          />
-        </Box>
-
-        <Button
-          variant="contained"
-          color="gray"
-          sx={{
-            marginTop: "20px",
-          }}
-          endIcon={<IoArrowForward />}
-          onClick={handleSetNumbers}
-        >
-          Next step
-        </Button>
+        <TabContext value={tab}>
+          <Box>
+            <TabList
+              onChange={handleTabChange}
+              aria-label="names"
+              variant="scrollable"
+              scrollButtons
+              allowScrollButtonsMobile
+              textColor="inherit"
+              indicatorColor="#292626"
+            >
+              <Tab label="Alternatives" value="1" />
+              <Tab label="Criteria" value="2" />
+              <Tab label="Linguistic terms" value="3" />
+              <Tab label="Linguistic terms" value="4" />
+              <Tab label="Experts" value="5" />
+            </TabList>
+          </Box>
+          <Box
+            component="span"
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <TabPanel value="1">
+              <Box
+                component="span"
+                sx={{
+                  p: 1.5,
+                  border: "1px solid #d5d5d5",
+                  borderRadius: "8px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "8px",
+                }}
+              >
+                {renderNameInputs(
+                  alternativeNames,
+                  "alternative",
+                  handleNameChange
+                )}
+              </Box>
+            </TabPanel>
+            <TabPanel value="2">
+              <Box
+                component="span"
+                sx={{
+                  p: 1.5,
+                  border: "1px solid #d5d5d5",
+                  borderRadius: "8px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "8px",
+                }}
+              >
+                {renderNameInputs(criteriaNames, "criteria")}
+              </Box>
+            </TabPanel>
+            <TabPanel value="3">
+              <Box
+                component="span"
+                sx={{
+                  p: 1.5,
+                  border: "1px solid #d5d5d5",
+                  borderRadius: "8px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "8px",
+                }}
+              >
+                {renderNameInputs(
+                  linguisticTermsForAlternativesNames,
+                  "lt-alternative"
+                )}
+              </Box>
+            </TabPanel>
+            <TabPanel value="4">
+              <Box
+                component="span"
+                sx={{
+                  p: 1.5,
+                  border: "1px solid #d5d5d5",
+                  borderRadius: "8px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "8px",
+                }}
+              >
+                {renderNameInputs(
+                  linguisticTermsForCriteriaNames,
+                  "lt-criteria"
+                )}
+              </Box>
+            </TabPanel>
+            <TabPanel value="5">
+              <Box
+                component="span"
+                sx={{
+                  p: 1.5,
+                  border: "1px solid #d5d5d5",
+                  borderRadius: "8px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "8px",
+                }}
+              >
+                {renderNameInputs(expertNames, "expert")}
+              </Box>
+            </TabPanel>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginTop: "20px",
+              }}
+            >
+              <Button
+                variant="contained"
+                color="gray"
+                onClick={() => handleSetupStep(false)}
+              >
+                Back
+              </Button>
+              <Button
+                variant="contained"
+                color="gray"
+                onClick={() => handleSetupStep(false)}
+              >
+                Next
+              </Button>
+            </Box>
+          </Box>
+        </TabContext>
       </Box>
     </>
   );
