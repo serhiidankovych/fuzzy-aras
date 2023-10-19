@@ -19,37 +19,36 @@ import {
 } from "recharts";
 
 import { useDispatch, useSelector } from "react-redux";
-import { setCriteriaConfiguration } from "../../../store/actions/criteriaConfigurationActions";
+import { setAlternativeConfiguration } from "../../../store/actions/alternativeConfigurationActions";
 
 import {
   generateContrastColor,
   handleLinguisticTermsChange,
   transformToTriangleForm,
 } from "../../../utils/linguisticTerms";
-
-export default function CriteriaConfiguration({ handleSetupStep }) {
-  const generatedCriteriaLinguisticTerms = useSelector(
-    (state) => state.criteriaConfiguration
+//FIX ON CHANGE VALUES
+export default function AlternativeConfiguration({ handleSetupStep }) {
+  const generatedAlternativeLinguisticTerms = useSelector(
+    (state) => state.alternativeConfiguration
   );
   const dispatch = useDispatch();
 
-  const [criteria, setCriteria] = React.useState(
-    generatedCriteriaLinguisticTerms.criteriaLinguisticTerms || []
+  const [alternative, setAlternative] = React.useState(
+    generatedAlternativeLinguisticTerms.alternativeLinguisticTerms || []
   );
 
-  console.log(criteria);
+  console.log(alternative);
 
   useEffect(() => {
-    transformToTriangleForm(criteria, setCriteria);
+    transformToTriangleForm(alternative, setAlternative);
   }, []);
 
-  const handleSetCriteria = () => {
-    dispatch(setCriteriaConfiguration(criteria));
-    handleSetupStep(true);
+  const handleSetAlternative = () => {
+    dispatch(setAlternativeConfiguration(alternative));
   };
 
-  const renderInputs = (criteria, nameType) => {
-    return criteria?.map((linguisticTerm, index) => (
+  const renderInputs = (alternative, nameType) => {
+    return alternative?.map((linguisticTerm, index) => (
       <Stack
         direction="row"
         justifyContent="space-between"
@@ -69,8 +68,8 @@ export default function CriteriaConfiguration({ handleSetupStep }) {
               index,
               e.target.value,
               0,
-              criteria,
-              setCriteria
+              alternative,
+              setAlternative
             )
           }
         />
@@ -85,8 +84,8 @@ export default function CriteriaConfiguration({ handleSetupStep }) {
               index,
               e.target.value,
               1,
-              criteria,
-              setCriteria
+              alternative,
+              setAlternative
             )
           }
         />
@@ -101,8 +100,8 @@ export default function CriteriaConfiguration({ handleSetupStep }) {
               index,
               e.target.value,
               2,
-              criteria,
-              setCriteria
+              alternative,
+              setAlternative
             )
           }
         />
@@ -110,7 +109,7 @@ export default function CriteriaConfiguration({ handleSetupStep }) {
     ));
   };
 
-  const numberOfSets = criteria?.length;
+  const numberOfSets = alternative?.length;
   const contrastColors = Array.from({ length: numberOfSets }, (_, index) =>
     generateContrastColor(index, numberOfSets)
   );
@@ -126,7 +125,7 @@ export default function CriteriaConfiguration({ handleSetupStep }) {
         gap: "8px",
       }}
     >
-      <Typography variant="h6">Provide input criteria LT</Typography>
+      <Typography variant="h6">Provide input alternative LT</Typography>
       <Box
         sx={{
           p: 1.5,
@@ -137,7 +136,7 @@ export default function CriteriaConfiguration({ handleSetupStep }) {
           gap: "8px",
         }}
       >
-        {renderInputs(criteria, "criteria", "lt")}
+        {renderInputs(alternative, "alternative", "lt")}
       </Box>
       <Typography>Linguistic terms:</Typography>
       <Box
@@ -159,7 +158,7 @@ export default function CriteriaConfiguration({ handleSetupStep }) {
             <ZAxis type="number" range={[100]} />
             <Tooltip cursor={{ strokeDasharray: "3 3" }} />
 
-            {criteria.map((linguisticTerm, index) => (
+            {alternative.map((linguisticTerm, index) => (
               <Scatter
                 key={index}
                 fill={contrastColors[index]}
@@ -190,7 +189,7 @@ export default function CriteriaConfiguration({ handleSetupStep }) {
             <ZAxis type="number" range={[100]} />
             <Tooltip cursor={{ strokeDasharray: "3 3" }} />
 
-            {criteria.map((linguisticTerm, index) => (
+            {alternative.map((linguisticTerm, index) => (
               <Scatter
                 key={index}
                 fill={contrastColors[index]}
@@ -220,7 +219,7 @@ export default function CriteriaConfiguration({ handleSetupStep }) {
         <Button
           variant="contained"
           color="gray"
-          onClick={handleSetCriteria}
+          onClick={handleSetAlternative}
           endIcon={<IoArrowForward />}
         >
           Next

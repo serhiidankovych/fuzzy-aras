@@ -14,6 +14,7 @@ import { IoArrowForward, IoArrowBackOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { setNameConfiguration } from "../../../store/actions/nameConfigurationActions";
 import { setCriteriaConfiguration } from "../../../store/actions/criteriaConfigurationActions";
+import { setAlternativeConfiguration } from "../../../store/actions/alternativeConfigurationActions";
 
 export default function NamesConfiguration({ handleSetupStep }) {
   const [tab, setTab] = React.useState("1");
@@ -78,27 +79,47 @@ export default function NamesConfiguration({ handleSetupStep }) {
     return values;
   };
 
-  const generatedTriangularValues = generateTriangularValues(
+  const generatedCriteriaTriangularValues = generateTriangularValues(
     names?.linguisticTermsForCriteriaNames?.length,
     1
   );
+  const generatedAlternativesTriangularValues = generateTriangularValues(
+    names?.linguisticTermsForAlternativesNames?.length,
+    1
+  );
 
-  const generateCriteriaLinguisticTerms = (names) => {
+  const generateLinguisticTerms = (
+    names,
+    type,
+    key,
+    generatedTriangularValues
+  ) => {
     const generatedLinguisticTerms = [];
     console.log(names);
-    for (let i = 0; i < names?.linguisticTermsForCriteriaNames?.length; i++) {
+    for (let i = 0; i < names[key]?.length; i++) {
       generatedLinguisticTerms.push({
-        linguisticTerm: names?.linguisticTermsForCriteriaNames[i],
+        linguisticTerm: names[key][i],
         confines: generatedTriangularValues[i],
-        type: "lt-criteria",
+        type: type,
       });
     }
 
     return generatedLinguisticTerms;
   };
 
-  const generatedCriteriaLinguisticTerms =
-    generateCriteriaLinguisticTerms(names);
+  const generatedCriteriaLinguisticTerms = generateLinguisticTerms(
+    names,
+    "lt-criteria",
+    "linguisticTermsForCriteriaNames",
+    generatedCriteriaTriangularValues
+  );
+
+  const generatedAlternativeLinguisticTerms = generateLinguisticTerms(
+    names,
+    "lt-alternative",
+    "linguisticTermsForAlternativesNames",
+    generatedAlternativesTriangularValues
+  );
   const handleSetNames = () => {
     const {
       alternativeNames,
@@ -118,6 +139,10 @@ export default function NamesConfiguration({ handleSetupStep }) {
       )
     );
     dispatch(setCriteriaConfiguration([...generatedCriteriaLinguisticTerms]));
+
+    dispatch(
+      setAlternativeConfiguration([...generatedAlternativeLinguisticTerms])
+    );
 
     console.log(generatedCriteriaLinguisticTerms);
     handleSetupStep(true);

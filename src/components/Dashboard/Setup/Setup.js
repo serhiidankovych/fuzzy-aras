@@ -7,6 +7,7 @@ import { IoCloseCircleOutline } from "react-icons/io5";
 import NumbersConfiguration from "./NumbersConfiguration";
 import NamesConfiguration from "./NamesConfiguration";
 import CriteriaConfiguration from "./CriteriaConfiguration";
+import AlternativeConfiguration from "./AlternativeConfiguration";
 
 export default function Setup({ isSetupOpen, setIsSetupOpen }) {
   const [setupStep, setSetupStep] = React.useState(0);
@@ -24,6 +25,7 @@ export default function Setup({ isSetupOpen, setIsSetupOpen }) {
       0: <NumbersConfiguration handleSetupStep={handleSetupStep} />,
       1: <NamesConfiguration handleSetupStep={handleSetupStep} />,
       2: <CriteriaConfiguration handleSetupStep={handleSetupStep} />,
+      3: <AlternativeConfiguration handleSetupStep={handleSetupStep} />,
     };
     return steps[step];
   };

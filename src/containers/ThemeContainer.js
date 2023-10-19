@@ -5,6 +5,7 @@ import {
   getContrastRatio,
   ThemeProvider,
   createTheme,
+  responsiveFontSizes,
 } from "@mui/material/styles";
 import backgroundImage from "../assets/background.png";
 
@@ -12,7 +13,7 @@ export default function ThemeContainer({ dashboard }) {
   const grayBase = "#292626";
   const grayMain = alpha(grayBase, 1);
 
-  const darkTheme = createTheme({
+  let darkTheme = createTheme({
     palette: {
       gray: {
         main: grayMain,
@@ -31,6 +32,15 @@ export default function ThemeContainer({ dashboard }) {
       fontFamily: "Montserrat,Reenie Beanie",
     },
   });
+
+  darkTheme = responsiveFontSizes(darkTheme);
+
+  // darkTheme.typography.h2 = {
+  //   "@media (min-width:600px)": {
+  //     fontSize: "3rem",
+  //   },
+  // };
+
   const backgroundStyles = {
     backgroundImage: `url(${backgroundImage})`,
     backgroundSize: "cover",
