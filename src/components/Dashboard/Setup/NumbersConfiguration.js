@@ -13,44 +13,47 @@ import { setNumberConfiguration } from "../../../store/actions/numberConfigurati
 import { setNameConfiguration } from "../../../store/actions/nameConfigurationActions";
 
 export default function NumberConfiguration({ handleSetupStep }) {
-  const [numberOfAlternatives, setNumberOfAlternatives] = React.useState(5);
-  const [numberOfCriteria, setNumberOfCriteria] = React.useState(8);
+  const initialNumbers = useSelector((state) => state.numberConfiguration);
+  const [numberOfAlternatives, setNumberOfAlternatives] = React.useState(
+    initialNumbers.numberOfAlternatives || 3
+  );
+  const [numberOfCriteria, setNumberOfCriteria] = React.useState(
+    initialNumbers.numberOfCriteria || 3
+  );
   const [
     numberOfLinguisticTermsForAlternatives,
     setNumberOfLinguisticTermsForAlternatives,
-  ] = React.useState(5);
+  ] = React.useState(
+    initialNumbers.numberOfLinguisticTermsForAlternatives || 3
+  );
   const [
     numberOfLinguisticTermsForCriteria,
     setNumberOfLinguisticTermsForCriteria,
-  ] = React.useState(5);
-  const [numberOfExperts, setNumberOfExperts] = React.useState(3);
+  ] = React.useState(initialNumbers.numberOfLinguisticTermsForCriteria || 3);
+  const [numberOfExperts, setNumberOfExperts] = React.useState(
+    initialNumbers.numberOfExperts || 3
+  );
 
   const dispatch = useDispatch();
 
-  const generateNamesArray = (prefix, count) => {
-    return Array.from(
-      { length: count },
-      (_, index) => `${prefix} ${index + 1}`
-    );
+  const generateNames = (prefix, count) => {
+    return Array.from({ length: count }, (_, index) => `${prefix}${index + 1}`);
   };
 
-  const generatedAlternativeNames = generateNamesArray(
+  const generatedAlternativeNames = generateNames(
     "Alternative",
     numberOfAlternatives
   );
-  const generatedCriteriaNames = generateNamesArray(
-    "Criteria",
-    numberOfCriteria
-  );
-  const generatedLinguisticTermsForAlternativesNames = generateNamesArray(
-    "Linguistic term",
+  const generatedCriteriaNames = generateNames("Criteria", numberOfCriteria);
+  const generatedLinguisticTermsForAlternativesNames = generateNames(
+    "aLT",
     numberOfLinguisticTermsForAlternatives
   );
-  const generatedLinguisticTermsForCriteriaNames = generateNamesArray(
-    "Linguistic term",
+  const generatedLinguisticTermsForCriteriaNames = generateNames(
+    "cLT",
     numberOfLinguisticTermsForCriteria
   );
-  const generatedExpertsNames = generateNamesArray("Expert", numberOfExperts);
+  const generatedExpertsNames = generateNames("Expert", numberOfExperts);
 
   const handleSetNumbers = () => {
     dispatch(
@@ -77,9 +80,6 @@ export default function NumberConfiguration({ handleSetupStep }) {
 
   return (
     <>
-      <Typography variant="h6" sx={{ fontWeight: "900", textAlign: "center" }}>
-        Provide input numbers
-      </Typography>
       <Box
         component="span"
         sx={{
@@ -91,6 +91,7 @@ export default function NumberConfiguration({ handleSetupStep }) {
           gap: "8px",
         }}
       >
+        <Typography variant="h6">Provide input numbers</Typography>
         <Box
           component="span"
           sx={{

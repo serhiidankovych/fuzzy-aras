@@ -1,16 +1,16 @@
-export const SET_NUMBER_CONFIGURATION = "SET_NUMBER_CONFIGURATION";
+import { SET_NUMBER } from "../actions/numberConfigurationActions";
 
 const initialState = {
-  numberOfAlternatives: 0,
-  numberOfCriteria: 0,
-  numberOfLinguisticTermsForAlternatives: 0,
-  numberOfLinguisticTermsForCriteria: 0,
-  numberOfExperts: 0,
+  numberOfAlternatives: 4,
+  numberOfCriteria: 8,
+  numberOfLinguisticTermsForAlternatives: 5,
+  numberOfLinguisticTermsForCriteria: 5,
+  numberOfExperts: 3,
 };
 
 const numberConfigurationReducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_NUMBER_CONFIGURATION:
+    case SET_NUMBER:
       return {
         ...state,
         numberOfAlternatives: action.payload.numberOfAlternatives,

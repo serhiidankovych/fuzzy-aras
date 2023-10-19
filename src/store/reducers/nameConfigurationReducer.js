@@ -1,4 +1,4 @@
-export const SET_NAME_CONFIGURATION = "SET_NAME_CONFIGURATION";
+import { SET_NAME } from "../actions/nameConfigurationActions";
 
 const initialState = {
   alternativeNames: [],
@@ -7,9 +7,10 @@ const initialState = {
   linguisticTermsForCriteriaNames: [],
   expertNames: [],
 };
+
 const nameConfigurationReducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_NAME_CONFIGURATION:
+    case SET_NAME:
       return {
         ...state,
         alternativeNames: action.payload.alternativeNames,

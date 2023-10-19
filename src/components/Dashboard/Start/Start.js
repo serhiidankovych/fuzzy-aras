@@ -17,8 +17,9 @@ function Start({ handleDisplaySetup }) {
             justifyContent: "space-evenly",
             alignItems: "center",
             borderRadius: "15px",
-            height: "90vh",
+            height: "80vh",
             flexWrap: "wrap",
+            marginTop: "20px",
           }}
         >
           <Box

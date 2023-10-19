@@ -1,3 +1,4 @@
+export const SET_NAME = "SET_NAME";
 export const setNameConfiguration = (
   alternativeNames,
   criteriaNames,
@@ -6,7 +7,7 @@ export const setNameConfiguration = (
   expertNames
 ) => {
   return {
-    type: "SET_NAME_CONFIGURATION",
+    type: SET_NAME,
     payload: {
       alternativeNames,
       criteriaNames,

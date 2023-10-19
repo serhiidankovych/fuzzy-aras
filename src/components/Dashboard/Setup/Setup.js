@@ -1,9 +1,12 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
+import IconButton from "@mui/material/IconButton";
+import { IoCloseCircleOutline } from "react-icons/io5";
 
 import NumbersConfiguration from "./NumbersConfiguration";
-import NameConfiguration from "./NameConfiguration";
+import NamesConfiguration from "./NamesConfiguration";
+import CriteriaConfiguration from "./CriteriaConfiguration";
 
 export default function Setup({ isSetupOpen, setIsSetupOpen }) {
   const [setupStep, setSetupStep] = React.useState(0);
@@ -19,7 +22,8 @@ export default function Setup({ isSetupOpen, setIsSetupOpen }) {
   const setupMenu = (step) => {
     const steps = {
       0: <NumbersConfiguration handleSetupStep={handleSetupStep} />,
-      1: <NameConfiguration handleSetupStep={handleSetupStep} />,
+      1: <NamesConfiguration handleSetupStep={handleSetupStep} />,
+      2: <CriteriaConfiguration handleSetupStep={handleSetupStep} />,
     };
     return steps[step];
   };
@@ -36,7 +40,7 @@ export default function Setup({ isSetupOpen, setIsSetupOpen }) {
   const list = () => (
     <Box
       sx={{
-        width: 400,
+        width: "333px",
         padding: "20px",
         display: "flex",
         flexDirection: "column",
@@ -44,6 +48,15 @@ export default function Setup({ isSetupOpen, setIsSetupOpen }) {
       }}
       role="presentation"
     >
+      <IconButton
+        sx={{
+          position: "absolute",
+          right: "20px",
+        }}
+        onClick={() => setIsSetupOpen(false)}
+      >
+        <IoCloseCircleOutline />
+      </IconButton>
       {setupMenu(setupStep)}
     </Box>
   );

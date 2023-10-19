@@ -1,3 +1,4 @@
+export const SET_NUMBER = "SET_NUMBER";
 export const setNumberConfiguration = (
   numberOfAlternatives,
   numberOfCriteria,
@@ -6,7 +7,7 @@ export const setNumberConfiguration = (
   numberOfExperts
 ) => {
   return {
-    type: "SET_NUMBER_CONFIGURATION",
+    type: "SET_NUMBER",
     payload: {
       numberOfAlternatives,
       numberOfCriteria,

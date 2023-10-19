@@ -22,6 +22,11 @@ export default function ThemeContainer({ dashboard }) {
           getContrastRatio(grayMain, "#fff") > 4.5 ? "#fff" : "#111",
       },
     },
+    components: {
+      MuiTabPanel: {
+        styleOverrides: { root: { padding: 0 } },
+      },
+    },
     typography: {
       fontFamily: "Montserrat,Reenie Beanie",
     },
