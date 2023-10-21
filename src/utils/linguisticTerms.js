@@ -117,11 +117,30 @@ const handleLinguisticTermsChange = (
 
   transformToTriangleForm(updatedLinguisticTerms, setLinguisticTerms);
 };
+const generateTriangularValues = (numTerms, x) => {
+  const step = x / (numTerms - 1);
+  const values = [];
 
+  for (let i = 0; i < numTerms; i++) {
+    const firstValue = i === 0 ? 0 : (i - 1) * step;
+    const secondValue = i === 0 ? 0 : i * step;
+    const thirdValue = i === numTerms - 1 ? 1 : (i + 1) * step;
+
+    const value = [
+      Number(firstValue.toFixed(1)),
+      Number(secondValue.toFixed(1)),
+      Number(thirdValue.toFixed(1)),
+    ];
+    values.push(value);
+  }
+
+  return values;
+};
 export {
   transformToTriangleForm,
   normalizeValue,
   generateContrastColor,
   hue2rgb,
   handleLinguisticTermsChange,
+  generateTriangularValues,
 };

@@ -37,8 +37,6 @@ export default function CriteriaConfiguration({ handleSetupStep }) {
     generatedCriteriaLinguisticTerms.criteriaLinguisticTerms || []
   );
 
-  console.log(criteria);
-
   useEffect(() => {
     transformToTriangleForm(criteria, setCriteria);
   }, []);

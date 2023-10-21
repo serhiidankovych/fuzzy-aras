@@ -1,9 +1,9 @@
 export const ADD_CRITERIA = "ADD_CRITERIA";
 export const UPDATE_CRITERIA = "UPDATE_CRITERIA";
-export const SET_CRITERIA = "SET_CRITERIA";
+export const SET_CRITERIA_LT = "SET_CRITERIA_LT";
 
 export const setCriteriaConfiguration = (linguisticTerms) => ({
-  type: SET_CRITERIA,
+  type: SET_CRITERIA_LT,
   payload: linguisticTerms,
 });
 

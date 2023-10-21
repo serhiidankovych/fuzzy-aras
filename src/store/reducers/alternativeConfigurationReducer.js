@@ -1,5 +1,5 @@
 import {
-  SET_ALTERNATIVE,
+  SET_ALTERNATIVES_LT,
   ADD_ALTERNATIVE,
   UPDATE_ALTERNATIVE,
 } from "../actions/alternativeConfigurationActions";
@@ -10,7 +10,7 @@ const initialState = {
 
 const alternativeConfigurationReducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_ALTERNATIVE:
+    case SET_ALTERNATIVES_LT:
       return {
         ...state,
         alternativeLinguisticTerms: action.payload,

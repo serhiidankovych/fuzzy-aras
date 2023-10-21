@@ -8,8 +8,13 @@ import NumbersConfiguration from "./NumbersConfiguration";
 import NamesConfiguration from "./NamesConfiguration";
 import CriteriaConfiguration from "./CriteriaConfiguration";
 import AlternativeConfiguration from "./AlternativeConfiguration";
+import CriteriaEstimationConfiguration from "./CriteriaEstimationConfiguration";
 
-export default function Setup({ isSetupOpen, setIsSetupOpen }) {
+export default function Setup({
+  isSetupOpen,
+  setIsSetupOpen,
+  setIsSetupFinised,
+}) {
   const [setupStep, setSetupStep] = React.useState(0);
 
   const handleSetupStep = (step) => {
@@ -24,8 +29,14 @@ export default function Setup({ isSetupOpen, setIsSetupOpen }) {
     const steps = {
       0: <NumbersConfiguration handleSetupStep={handleSetupStep} />,
       1: <NamesConfiguration handleSetupStep={handleSetupStep} />,
-      2: <CriteriaConfiguration handleSetupStep={handleSetupStep} />,
-      3: <AlternativeConfiguration handleSetupStep={handleSetupStep} />,
+      2: <AlternativeConfiguration handleSetupStep={handleSetupStep} />,
+      3: <CriteriaConfiguration handleSetupStep={handleSetupStep} />,
+      4: (
+        <CriteriaEstimationConfiguration
+          handleSetupStep={handleSetupStep}
+          setIsSetupFinised={setIsSetupFinised}
+        />
+      ),
     };
     return steps[step];
   };

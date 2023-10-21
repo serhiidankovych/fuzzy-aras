@@ -15,17 +15,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { setNameConfiguration } from "../../../store/actions/nameConfigurationActions";
 import { setCriteriaConfiguration } from "../../../store/actions/criteriaConfigurationActions";
 import { setAlternativeConfiguration } from "../../../store/actions/alternativeConfigurationActions";
+// import { setCriteriaEstimationConfiguration } from "../../../store/actions/criteriaEstimationConfigurationActions";
+
+import { generateExpertEstimations } from "../../../utils/expertEstimations";
+import { generateTriangularValues } from "../../../utils/linguisticTerms";
 
 export default function NamesConfiguration({ handleSetupStep }) {
-  const [tab, setTab] = React.useState("1");
-  const [names, setNames] = React.useState([]);
   const generatedNames = useSelector((state) => state.nameConfiguration);
+  const [tab, setTab] = React.useState("1");
+  const [names, setNames] = React.useState(generatedNames || []);
 
   const dispatch = useDispatch();
-
-  React.useEffect(() => {
-    setNames(generatedNames || []);
-  }, [generatedNames]);
 
   const handleTabChange = (event, newValue) => {
     setTab(newValue);
@@ -47,7 +47,7 @@ export default function NamesConfiguration({ handleSetupStep }) {
     return nameArray.map((name, index) => (
       <TextField
         id={`${label}${index + 1}`}
-        label={`${label}-${index + 1}`}
+        label={`${label}${index + 1}`}
         key={`${label}-${index}`}
         value={name}
         variant="outlined"
@@ -59,35 +59,6 @@ export default function NamesConfiguration({ handleSetupStep }) {
     ));
   };
 
-  const generateTriangularValues = (numTerms, x) => {
-    const step = x / (numTerms - 1);
-    const values = [];
-
-    for (let i = 0; i < numTerms; i++) {
-      const firstValue = i === 0 ? 0 : (i - 1) * step;
-      const secondValue = i === 0 ? 0 : i * step;
-      const thirdValue = i === numTerms - 1 ? 1 : (i + 1) * step;
-
-      const value = [
-        Number(firstValue.toFixed(1)),
-        Number(secondValue.toFixed(1)),
-        Number(thirdValue.toFixed(1)),
-      ];
-      values.push(value);
-    }
-
-    return values;
-  };
-
-  const generatedCriteriaTriangularValues = generateTriangularValues(
-    names?.linguisticTermsForCriteriaNames?.length,
-    1
-  );
-  const generatedAlternativesTriangularValues = generateTriangularValues(
-    names?.linguisticTermsForAlternativesNames?.length,
-    1
-  );
-
   const generateLinguisticTerms = (
     names,
     type,
@@ -95,9 +66,10 @@ export default function NamesConfiguration({ handleSetupStep }) {
     generatedTriangularValues
   ) => {
     const generatedLinguisticTerms = [];
-    console.log(names);
+
     for (let i = 0; i < names[key]?.length; i++) {
       generatedLinguisticTerms.push({
+        id: i,
         linguisticTerm: names[key][i],
         confines: generatedTriangularValues[i],
         type: type,
@@ -107,19 +79,6 @@ export default function NamesConfiguration({ handleSetupStep }) {
     return generatedLinguisticTerms;
   };
 
-  const generatedCriteriaLinguisticTerms = generateLinguisticTerms(
-    names,
-    "lt-criteria",
-    "linguisticTermsForCriteriaNames",
-    generatedCriteriaTriangularValues
-  );
-
-  const generatedAlternativeLinguisticTerms = generateLinguisticTerms(
-    names,
-    "lt-alternative",
-    "linguisticTermsForAlternativesNames",
-    generatedAlternativesTriangularValues
-  );
   const handleSetNames = () => {
     const {
       alternativeNames,
@@ -128,6 +87,29 @@ export default function NamesConfiguration({ handleSetupStep }) {
       linguisticTermsForCriteriaNames,
       expertNames,
     } = names;
+
+    const generatedCriteriaTriangularValues = generateTriangularValues(
+      names?.linguisticTermsForCriteriaNames?.length,
+      1
+    );
+    const generatedAlternativesTriangularValues = generateTriangularValues(
+      names?.linguisticTermsForAlternativesNames?.length,
+      1
+    );
+
+    const generatedCriteriaLinguisticTerms = generateLinguisticTerms(
+      names,
+      "lt-criteria",
+      "linguisticTermsForCriteriaNames",
+      generatedCriteriaTriangularValues
+    );
+
+    const generatedAlternativeLinguisticTerms = generateLinguisticTerms(
+      names,
+      "lt-alternative",
+      "linguisticTermsForAlternativesNames",
+      generatedAlternativesTriangularValues
+    );
 
     dispatch(
       setNameConfiguration(
@@ -143,8 +125,15 @@ export default function NamesConfiguration({ handleSetupStep }) {
     dispatch(
       setAlternativeConfiguration([...generatedAlternativeLinguisticTerms])
     );
+    // const generatedCriteriaExpertEstimations = generateExpertEstimations(
+    //   names,
+    //   "experts"
+    // );
 
-    console.log(generatedCriteriaLinguisticTerms);
+    // dispatch(
+    //   setCriteriaEstimationConfiguration(generatedCriteriaExpertEstimations)
+    // );
+
     handleSetupStep(true);
   };
 
@@ -180,12 +169,12 @@ export default function NamesConfiguration({ handleSetupStep }) {
                 scrollButtons="auto"
                 allowScrollButtonsMobile
                 textColor="inherit"
-                indicatorColor="#292626"
+                indicatorColor="secondary"
               >
                 <Tab label="Alternatives" value="1" />
                 <Tab label="Criteria" value="2" />
-                <Tab label="Linguistic terms" value="3" />
-                <Tab label="Linguistic terms" value="4" />
+                <Tab label="Alternatives LT" value="3" />
+                <Tab label="Criteria LT" value="4" />
                 <Tab label="Experts" value="5" />
               </TabList>
             </Box>
@@ -208,7 +197,7 @@ export default function NamesConfiguration({ handleSetupStep }) {
                     renderNameInputs(
                       names?.alternativeNames,
                       "alternativeNames",
-                      "alternative"
+                      "a"
                     )}
                 </Box>
               </TabPanel>
@@ -224,7 +213,7 @@ export default function NamesConfiguration({ handleSetupStep }) {
                     renderNameInputs(
                       names?.criteriaNames,
                       "criteriaNames",
-                      "criteria"
+                      "c"
                     )}
                 </Box>
               </TabPanel>
@@ -240,7 +229,7 @@ export default function NamesConfiguration({ handleSetupStep }) {
                     renderNameInputs(
                       names?.linguisticTermsForAlternativesNames,
                       "linguisticTermsForAlternativesNames",
-                      "lt-alternative"
+                      "aLT"
                     )}
                 </Box>
               </TabPanel>
@@ -256,7 +245,7 @@ export default function NamesConfiguration({ handleSetupStep }) {
                     renderNameInputs(
                       names?.linguisticTermsForCriteriaNames,
                       "linguisticTermsForCriteriaNames",
-                      "lt-criteria"
+                      "cLT"
                     )}
                 </Box>
               </TabPanel>
@@ -269,11 +258,7 @@ export default function NamesConfiguration({ handleSetupStep }) {
                   }}
                 >
                   {names?.expertNames?.length > 0 &&
-                    renderNameInputs(
-                      names.expertNames,
-                      "expertNames",
-                      "expert"
-                    )}
+                    renderNameInputs(names.expertNames, "expertNames", "e")}
                 </Box>
               </TabPanel>
             </Box>

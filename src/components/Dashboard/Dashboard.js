@@ -10,6 +10,7 @@ import Setup from "./Setup/Setup";
 
 export default function Dashboard() {
   const [isSetupOpen, setIsSetupOpen] = React.useState(false);
+  const [isSetupFinised, setIsSetupFinised] = React.useState(false);
 
   const handleDisplaySetup = () => {
     setIsSetupOpen((prev) => !prev);
@@ -18,9 +19,13 @@ export default function Dashboard() {
     <>
       <Header handleDisplaySetup={handleDisplaySetup} />
       <Container maxWidth="lg">
-        <Start handleDisplaySetup={handleDisplaySetup} />
+        {!isSetupFinised && <Start handleDisplaySetup={handleDisplaySetup} />}
       </Container>
-      <Setup isSetupOpen={isSetupOpen} setIsSetupOpen={setIsSetupOpen} />
+      <Setup
+        isSetupOpen={isSetupOpen}
+        setIsSetupOpen={setIsSetupOpen}
+        setIsSetupFinised={setIsSetupFinised}
+      />
       <Footer />
       <ToastContainer />
     </>

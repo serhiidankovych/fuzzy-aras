@@ -6,6 +6,7 @@ const initialState = {
   linguisticTermsForAlternativesNames: [],
   linguisticTermsForCriteriaNames: [],
   expertNames: [],
+  expertIndices: [],
 };
 
 const nameConfigurationReducer = (state = initialState, action) => {
@@ -20,6 +21,7 @@ const nameConfigurationReducer = (state = initialState, action) => {
         linguisticTermsForCriteriaNames:
           action.payload.linguisticTermsForCriteriaNames,
         expertNames: action.payload.expertNames,
+        expertIndices: action.payload.expertIndices,
       };
     default:
       return state;

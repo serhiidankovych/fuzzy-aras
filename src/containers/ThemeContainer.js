@@ -15,6 +15,9 @@ export default function ThemeContainer({ dashboard }) {
 
   let darkTheme = createTheme({
     palette: {
+      secondary: {
+        main: "#0e1111",
+      },
       gray: {
         main: grayMain,
         light: alpha(grayBase, 0.5),
@@ -35,11 +38,6 @@ export default function ThemeContainer({ dashboard }) {
 
   darkTheme = responsiveFontSizes(darkTheme);
 
-  // darkTheme.typography.h2 = {
-  //   "@media (min-width:600px)": {
-  //     fontSize: "3rem",
-  //   },
-  // };
 
   const backgroundStyles = {
     backgroundImage: `url(${backgroundImage})`,

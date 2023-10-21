@@ -26,7 +26,7 @@ import {
   handleLinguisticTermsChange,
   transformToTriangleForm,
 } from "../../../utils/linguisticTerms";
-//FIX ON CHANGE VALUES
+
 export default function AlternativeConfiguration({ handleSetupStep }) {
   const generatedAlternativeLinguisticTerms = useSelector(
     (state) => state.alternativeConfiguration
@@ -37,14 +37,13 @@ export default function AlternativeConfiguration({ handleSetupStep }) {
     generatedAlternativeLinguisticTerms.alternativeLinguisticTerms || []
   );
 
-  console.log(alternative);
-
   useEffect(() => {
     transformToTriangleForm(alternative, setAlternative);
   }, []);
 
   const handleSetAlternative = () => {
     dispatch(setAlternativeConfiguration(alternative));
+    handleSetupStep(true);
   };
 
   const renderInputs = (alternative, nameType) => {

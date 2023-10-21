@@ -1,16 +1,14 @@
 import {
-  SET_CRITERIA,
+  SET_CRITERIA_LT,
   ADD_CRITERIA,
   UPDATE_CRITERIA,
 } from "../actions/criteriaConfigurationActions";
 
-const initialState = {
-  criteriaLinguisticTerms: [],
-};
+const initialState = {};
 
 const criteriaConfigurationReducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_CRITERIA:
+    case SET_CRITERIA_LT:
       return {
         ...state,
         criteriaLinguisticTerms: action.payload,
