@@ -25,7 +25,10 @@ import {
   expertsEstimations,
 } from "../../../templates/dataset1";
 
-export default function DatasetConfiguration({ setIsSetupFinised }) {
+export default function DatasetConfiguration({
+  setIsSetupFinised,
+  setIsDatasetNotUsed,
+}) {
   const dispatch = useDispatch();
 
   const handleSetDataset = () => {
@@ -45,7 +48,6 @@ export default function DatasetConfiguration({ setIsSetupFinised }) {
       linguisticTermsForCriteriaNames,
       expertNames,
     } = names;
-    console.log(alternativeNames);
 
     dispatch(
       setNameConfiguration(
@@ -61,6 +63,7 @@ export default function DatasetConfiguration({ setIsSetupFinised }) {
     dispatch(setCriteriaEstimationConfiguration(criteriaEstimations));
     dispatch(setExpertsEstimationConfiguration(expertsEstimations));
     setIsSetupFinised(true);
+    setIsDatasetNotUsed(false);
   };
 
   return (

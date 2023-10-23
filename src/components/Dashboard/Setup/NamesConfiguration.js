@@ -15,12 +15,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { setNameConfiguration } from "../../../store/actions/nameConfigurationActions";
 import { setCriteriaConfiguration } from "../../../store/actions/criteriaConfigurationActions";
 import { setAlternativeConfiguration } from "../../../store/actions/alternativeConfigurationActions";
-// import { setCriteriaEstimationConfiguration } from "../../../store/actions/criteriaEstimationConfigurationActions";
 
-import { generateExpertEstimations } from "../../../utils/expertEstimations";
 import { generateTriangularValues } from "../../../utils/linguisticTerms";
 
-export default function NamesConfiguration({ handleSetupStep }) {
+export default function NamesConfiguration({
+  handleSetupStep,
+  isDatasetNotUsed,
+}) {
   const generatedNames = useSelector((state) => state.nameConfiguration);
   const [tab, setTab] = React.useState("1");
   const [names, setNames] = React.useState(generatedNames || []);
@@ -111,6 +112,14 @@ export default function NamesConfiguration({ handleSetupStep }) {
       generatedAlternativesTriangularValues
     );
 
+    // if (isDatasetNotUsed) {
+
+    // }
+    dispatch(setCriteriaConfiguration([...generatedCriteriaLinguisticTerms]));
+
+    dispatch(
+      setAlternativeConfiguration([...generatedAlternativeLinguisticTerms])
+    );
     dispatch(
       setNameConfiguration(
         alternativeNames,
@@ -120,19 +129,6 @@ export default function NamesConfiguration({ handleSetupStep }) {
         expertNames
       )
     );
-    dispatch(setCriteriaConfiguration([...generatedCriteriaLinguisticTerms]));
-
-    dispatch(
-      setAlternativeConfiguration([...generatedAlternativeLinguisticTerms])
-    );
-    // const generatedCriteriaExpertEstimations = generateExpertEstimations(
-    //   names,
-    //   "experts"
-    // );
-
-    // dispatch(
-    //   setCriteriaEstimationConfiguration(generatedCriteriaExpertEstimations)
-    // );
 
     handleSetupStep(true);
   };

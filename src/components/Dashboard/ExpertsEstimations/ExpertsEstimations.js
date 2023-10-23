@@ -21,46 +21,72 @@ import { IoArrowForward, IoArrowBackOutline } from "react-icons/io5";
 
 import { useDispatch, useSelector } from "react-redux";
 import { setExpertsEstimationConfiguration } from "../../../store/actions/expertsEstimationConfigurationActions";
-import { expertsEstimations } from "../../../templates/dataset1";
 
-export default function ExpertsEstimations({ handleSetupStep }) {
+export default function ExpertsEstimations() {
   const alternativesLinguisticTerms = useSelector(
     (state) => state.alternativeConfiguration
   );
 
   const names = useSelector((state) => state.nameConfiguration);
-  // const expertsEstimations = useSelector(
-  //   (state) => state.expertsEstimationConfiguration
-  // );
+  const expertsEstimations = useSelector(
+    (state) => state.expertsEstimationConfiguration
+  );
+
+  const [linguisticTerms, setLinguisticTerms] = React.useState(
+    alternativesLinguisticTerms.alternativeLinguisticTerms || {}
+  );
+  const [selectedItems, setSelectedItems] = React.useState(
+    expertsEstimations.expertsEstimation || {}
+  );
+
+  React.useEffect(() => {
+    setLinguisticTerms(alternativesLinguisticTerms.alternativeLinguisticTerms);
+  }, [alternativesLinguisticTerms]);
+
+  React.useEffect(() => {
+    // Iterate over selectedItems and update the linguisticTerm based on the updated linguisticTerms
+    const updatedSelectedItems = {};
+    Object.keys(selectedItems).forEach((itemId) => {
+      const currentItem = selectedItems[itemId];
+      const updatedOption = linguisticTerms.find(
+        (option) => option.id === currentItem.data.id
+      );
+
+      updatedSelectedItems[itemId] = {
+        data: updatedOption,
+        alternative: currentItem.alternative,
+        criteria: currentItem.criteria,
+        expertId: currentItem.expertId,
+      };
+    });
+
+    setSelectedItems(updatedSelectedItems);
+  }, [linguisticTerms]); // Add selectedItems as a dependency if needed, based on your specific use case
+
   const dispatch = useDispatch();
   const itemsPerPage = 1;
   const [currentPage, setCurrentPage] = React.useState(1);
-  // const [selectedItems, setSelectedItems] = React.useState(
-  //   expertsEstimations.expertsEstimation || {}
-  // );
-  const [selectedItems, setSelectedItems] = React.useState(expertsEstimations);
-  console.log(selectedItems);
-
-  React.useEffect(() => {
-    setSelectedItems(expertsEstimations);
-  }, [expertsEstimations]);
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentExpert = names.expertIndices.slice(startIndex, endIndex);
 
   const handleSetExpertEstimations = () => {
-    console.log("transform");
     dispatch(setExpertsEstimationConfiguration(selectedItems));
   };
   const handlePageChange = (event, newPage) => {
     setCurrentPage(newPage);
   };
 
-  const handleSelectChange = (event, itemId) => {
+  const handleSelectChange = (event, id) => {
     const { value } = event.target;
+    const selectedOption = linguisticTerms.find(
+      (option) => option.linguisticTerm === value
+    );
+
     const updatedSelectedItems = { ...selectedItems };
-    updatedSelectedItems[itemId].data.linguisticTerm = value;
+    updatedSelectedItems[id].data = selectedOption; // Store the entire selected option object.
+
     setSelectedItems(updatedSelectedItems);
   };
 
@@ -75,19 +101,17 @@ export default function ExpertsEstimations({ handleSetupStep }) {
             <TableCell key={criteriaIndex} align="center">
               <FormControl sx={{ m: 1, minWidth: 160 }} size="small">
                 <Select
-                  value={selectedItems[itemId]?.data.linguisticTerm}
+                  value={selectedItems[itemId]?.data?.linguisticTerm || ""}
                   onChange={(event) => handleSelectChange(event, itemId)}
                 >
-                  {alternativesLinguisticTerms.alternativeLinguisticTerms.map(
-                    (option) => (
-                      <MenuItem
-                        key={option.linguisticTerm}
-                        value={option.linguisticTerm}
-                      >
-                        {option.linguisticTerm}
-                      </MenuItem>
-                    )
-                  )}
+                  {linguisticTerms.map((option) => (
+                    <MenuItem
+                      key={option.linguisticTerm}
+                      value={option.linguisticTerm}
+                    >
+                      {option.linguisticTerm}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             </TableCell>
@@ -115,9 +139,10 @@ export default function ExpertsEstimations({ handleSetupStep }) {
         flexDirection: "column",
         gap: "8px",
         alignItems: "flex-start",
-        margin: "20px",
+        marginTop: "20px",
       }}
     >
+      <Typography variant="h3">Experts estimations</Typography>
       <Box
         sx={{
           display: "flex",
@@ -125,16 +150,9 @@ export default function ExpertsEstimations({ handleSetupStep }) {
           alignItems: "center",
           gap: "8px",
           flexWrap: "wrap",
+          paddingLeft: "8px",
         }}
       >
-        <Pagination
-          count={Math.ceil(names.expertNames.length / itemsPerPage)}
-          page={currentPage}
-          onChange={handlePageChange}
-          variant="outlined"
-          shape="rounded"
-        />
-        <Typography variant="h6">Expert: </Typography>
         <Typography variant="h4" sx={{ fontFamily: "Reenie Beanie" }}>
           {names.expertNames[currentExpert]}
         </Typography>
@@ -155,14 +173,31 @@ export default function ExpertsEstimations({ handleSetupStep }) {
           <TableBody>{MenuItems}</TableBody>
         </Table>
       </TableContainer>
-
-      <Button
-        onClick={handleSetExpertEstimations}
-        variant="contained"
-        color="gray"
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: "8px",
+          flexWrap: "wrap",
+        }}
       >
-        Use Fuzzy Aras magic ✨🧙🏻‍♂️
-      </Button>
+        <Button
+          onClick={handleSetExpertEstimations}
+          variant="contained"
+          color="gray"
+        >
+          Use Fuzzy Aras magic ✨🧙🏻‍♂️
+        </Button>
+
+        <Pagination
+          count={Math.ceil(names.expertNames.length / itemsPerPage)}
+          page={currentPage}
+          onChange={handlePageChange}
+          variant="outlined"
+          shape="rounded"
+        />
+      </Box>
     </Box>
   );
 }

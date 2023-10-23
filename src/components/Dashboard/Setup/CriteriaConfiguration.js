@@ -27,7 +27,10 @@ import {
   transformToTriangleForm,
 } from "../../../utils/linguisticTerms";
 
-export default function CriteriaConfiguration({ handleSetupStep }) {
+export default function CriteriaConfiguration({
+  handleSetupStep,
+  isDatasetNotUsed,
+}) {
   const generatedCriteriaLinguisticTerms = useSelector(
     (state) => state.criteriaConfiguration
   );
@@ -42,6 +45,9 @@ export default function CriteriaConfiguration({ handleSetupStep }) {
   }, []);
 
   const handleSetCriteria = () => {
+    // if (isDatasetNotUsed) {
+
+    // }
     dispatch(setCriteriaConfiguration(criteria));
     handleSetupStep(true);
   };

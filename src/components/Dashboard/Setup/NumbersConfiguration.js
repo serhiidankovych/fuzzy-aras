@@ -17,6 +17,8 @@ import { setNameConfiguration } from "../../../store/actions/nameConfigurationAc
 export default function NumberConfiguration({
   handleSetupStep,
   setIsSetupFinised,
+  setIsDatasetNotUsed,
+  isDatasetNotUsed,
 }) {
   const initialNumbers = useSelector((state) => state.numberConfiguration);
   const [numberOfAlternatives, setNumberOfAlternatives] = React.useState(
@@ -61,24 +63,26 @@ export default function NumberConfiguration({
   const generatedExpertsNames = generateNames("Expert", numberOfExperts);
 
   const handleSetNumbers = () => {
-    dispatch(
-      setNumberConfiguration(
-        numberOfAlternatives,
-        numberOfCriteria,
-        numberOfLinguisticTermsForAlternatives,
-        numberOfLinguisticTermsForCriteria,
-        numberOfExperts
-      )
-    );
-    dispatch(
-      setNameConfiguration(
-        [...generatedAlternativeNames],
-        [...generatedCriteriaNames],
-        [...generatedLinguisticTermsForAlternativesNames],
-        [...generatedLinguisticTermsForCriteriaNames],
-        [...generatedExpertsNames]
-      )
-    );
+    if (isDatasetNotUsed) {
+      dispatch(
+        setNumberConfiguration(
+          numberOfAlternatives,
+          numberOfCriteria,
+          numberOfLinguisticTermsForAlternatives,
+          numberOfLinguisticTermsForCriteria,
+          numberOfExperts
+        )
+      );
+      dispatch(
+        setNameConfiguration(
+          [...generatedAlternativeNames],
+          [...generatedCriteriaNames],
+          [...generatedLinguisticTermsForAlternativesNames],
+          [...generatedLinguisticTermsForCriteriaNames],
+          [...generatedExpertsNames]
+        )
+      );
+    }
 
     handleSetupStep(true);
   };
@@ -96,7 +100,10 @@ export default function NumberConfiguration({
           gap: "8px",
         }}
       >
-        <DatasetConfiguration setIsSetupFinised={setIsSetupFinised} />
+        <DatasetConfiguration
+          setIsSetupFinised={setIsSetupFinised}
+          setIsDatasetNotUsed={setIsDatasetNotUsed}
+        />
         <Typography variant="h6">Provide input numbers</Typography>
         <Box
           component="span"
@@ -122,6 +129,7 @@ export default function NumberConfiguration({
             max={10}
             onChange={(e) => setNumberOfAlternatives(e.target.value)}
             color="gray"
+            disabled={!isDatasetNotUsed}
           />
         </Box>
         <Box
@@ -148,6 +156,7 @@ export default function NumberConfiguration({
             max={10}
             onChange={(e) => setNumberOfCriteria(e.target.value)}
             color="gray"
+            disabled={!isDatasetNotUsed}
           />
         </Box>
         <Box
@@ -176,6 +185,7 @@ export default function NumberConfiguration({
               setNumberOfLinguisticTermsForAlternatives(e.target.value)
             }
             color="gray"
+            disabled={!isDatasetNotUsed}
           />
         </Box>
         <Box
@@ -204,6 +214,7 @@ export default function NumberConfiguration({
               setNumberOfLinguisticTermsForCriteria(e.target.value)
             }
             color="gray"
+            disabled={!isDatasetNotUsed}
           />
         </Box>
         <Box
@@ -230,6 +241,7 @@ export default function NumberConfiguration({
             max={5}
             onChange={(e) => setNumberOfExperts(e.target.value)}
             color="gray"
+            disabled={!isDatasetNotUsed}
           />
         </Box>
 

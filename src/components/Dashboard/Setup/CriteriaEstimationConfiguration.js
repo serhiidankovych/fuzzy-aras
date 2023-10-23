@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -13,6 +13,7 @@ import {
   TableHead,
   TableRow,
   Typography,
+  FormControl,
 } from "@mui/material";
 
 import { IoArrowForward, IoArrowBackOutline } from "react-icons/io5";
@@ -23,9 +24,10 @@ import { setCriteriaEstimationConfiguration } from "../../../store/actions/crite
 export default function CriteriaEstimationConfiguration({
   handleSetupStep,
   setIsSetupFinised,
+  isDatasetNotUsed,
 }) {
   const dispatch = useDispatch();
-  const generatedCriteriaEstimation = useSelector(
+  const criteriaEstimation = useSelector(
     (state) => state.criteriaEstimationConfiguration
   );
 
@@ -35,65 +37,91 @@ export default function CriteriaEstimationConfiguration({
 
   const names = useSelector((state) => state.nameConfiguration);
 
-  const [criteriaEstimations, setCriteriaEstimations] = React.useState(
-    generatedCriteriaEstimation.criteriaEstimation || []
+  const [selectedItems, setSelectedItems] = React.useState(
+    criteriaEstimation.criteriaEstimation || {}
   );
-  const [selectedItems, setSelectedItems] = React.useState({});
+
+  const [linguisticTerms, setLinguisticTerms] = React.useState(
+    criteriaLinguisticTerms.criteriaLinguisticTerms || {}
+  );
+
+  useEffect(() => {
+    setLinguisticTerms(criteriaLinguisticTerms.criteriaLinguisticTerms);
+  }, [criteriaLinguisticTerms]);
+
+  useEffect(() => {
+    // Iterate over selectedItems and update the linguisticTerm based on the updated linguisticTerms
+    const updatedSelectedItems = {};
+    Object.keys(selectedItems).forEach((itemId) => {
+      const currentItem = selectedItems[itemId];
+      const updatedOption = linguisticTerms.find(
+        (option) => option.id === currentItem.id
+      );
+      updatedSelectedItems[itemId] = updatedOption || currentItem;
+    });
+    setSelectedItems(updatedSelectedItems);
+  }, [linguisticTerms]);
+
   const itemsPerPage = 1;
-
   const [currentPage, setCurrentPage] = React.useState(1);
-
-  // Calculate the start and end indices for the current page
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
 
-  // Get the current page's data
   const currentExpert = names.expertIndices.slice(startIndex, endIndex);
 
   const handleSetCriteriaEstimations = () => {
-    setIsSetupFinised(true);
+    // if (isDatasetNotUsed) {
+
+    // }
     dispatch(setCriteriaEstimationConfiguration(selectedItems));
+    setIsSetupFinised(true);
   };
   const handlePageChange = (event, newPage) => {
     setCurrentPage(newPage);
   };
 
   const handleSelectChange = (event, id) => {
-    setSelectedItems((prevState) => ({
-      ...prevState,
-      [id]: event.target.value,
-    }));
+    const { value } = event.target;
+    const selectedOption = linguisticTerms.find(
+      (option) => option.linguisticTerm === value
+    );
+
+    const updatedSelectedItems = { ...selectedItems };
+    updatedSelectedItems[id] = selectedOption; // Store the entire selected option object.
+
+    setSelectedItems(updatedSelectedItems);
   };
 
-  const MenuItems = currentExpert.map((expertName, expertIndex) =>
-    names.criteriaNames.map((criteriaName, criteriaIndex) => (
-      <TableRow key={`${currentExpert}-${criteriaIndex}`}>
-        <TableCell>{names.expertNames[expertName]}</TableCell>
-        <TableCell>{criteriaName}</TableCell>
-        <TableCell>
-          <Select
-            value={
-              selectedItems[
-                `e${Number(currentExpert) + 1}-c${criteriaIndex + 1}`
-              ] || ""
-            }
-            onChange={(event) =>
-              handleSelectChange(
-                event,
-                `e${Number(currentExpert) + 1}-c${criteriaIndex + 1}`
-              )
-            }
-          >
-            {criteriaLinguisticTerms.criteriaLinguisticTerms.map((option) => (
-              <MenuItem key={option.linguisticTerm} value={option}>
-                {option.linguisticTerm}
-              </MenuItem>
-            ))}
-          </Select>
-        </TableCell>
-      </TableRow>
-    ))
-  );
+  const MenuItems = currentExpert.map((expertId, expertIndex) => {
+    return names.criteriaNames.map((criteriaName, criteriaIndex) => {
+      const itemId = `e${Number(expertId) + 1}-c${criteriaIndex + 1}`;
+
+      return (
+        <TableRow key={`${currentExpert}-${criteriaIndex}`}>
+          <TableCell>{names.expertNames[expertId]}</TableCell>
+          <TableCell>{criteriaName}</TableCell>
+          <TableCell>
+            <FormControl sx={{ m: 1, minWidth: 160 }} size="small">
+              <Select
+                value={
+                  selectedItems[itemId] && selectedItems[itemId].linguisticTerm
+                    ? selectedItems[itemId].linguisticTerm
+                    : ""
+                }
+                onChange={(event) => handleSelectChange(event, itemId)}
+              >
+                {linguisticTerms.map((option) => (
+                  <MenuItem key={option.id} value={option.linguisticTerm}>
+                    {option.linguisticTerm}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </TableCell>
+        </TableRow>
+      );
+    });
+  });
 
   return (
     <Box
@@ -119,11 +147,10 @@ export default function CriteriaEstimationConfiguration({
           <TableBody>{MenuItems}</TableBody>
         </Table>
       </TableContainer>
-      <Typography>Experts:</Typography>
       <Box
         sx={{
           display: "flex",
-          justifyContent: "center",
+          justifyContent: "flex-start",
         }}
       >
         <Pagination

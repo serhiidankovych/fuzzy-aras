@@ -14,6 +14,8 @@ export default function Setup({
   isSetupOpen,
   setIsSetupOpen,
   setIsSetupFinised,
+  setIsDatasetNotUsed,
+  isDatasetNotUsed,
 }) {
   const [setupStep, setSetupStep] = React.useState(0);
 
@@ -31,6 +33,8 @@ export default function Setup({
         <NumbersConfiguration
           handleSetupStep={handleSetupStep}
           setIsSetupFinised={setIsSetupFinised}
+          setIsDatasetNotUsed={setIsDatasetNotUsed}
+          isDatasetNotUsed={isDatasetNotUsed}
         />
       ),
       1: <NamesConfiguration handleSetupStep={handleSetupStep} />,

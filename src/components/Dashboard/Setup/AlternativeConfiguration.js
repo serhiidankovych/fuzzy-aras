@@ -27,7 +27,10 @@ import {
   transformToTriangleForm,
 } from "../../../utils/linguisticTerms";
 
-export default function AlternativeConfiguration({ handleSetupStep }) {
+export default function AlternativeConfiguration({
+  handleSetupStep,
+  isDatasetNotUsed,
+}) {
   const generatedAlternativeLinguisticTerms = useSelector(
     (state) => state.alternativeConfiguration
   );
@@ -41,7 +44,18 @@ export default function AlternativeConfiguration({ handleSetupStep }) {
     transformToTriangleForm(alternative, setAlternative);
   }, []);
 
+  // useEffect(() => {
+  //   setAlternative(
+  //     generatedAlternativeLinguisticTerms.alternativeLinguisticTerms
+  //   );
+  // }, [generatedAlternativeLinguisticTerms]);
+
+  console.log(alternative);
+
   const handleSetAlternative = () => {
+    // if (isDatasetNotUsed) {
+
+    // }
     dispatch(setAlternativeConfiguration(alternative));
     handleSetupStep(true);
   };
