@@ -27,7 +27,12 @@ export default function Setup({
 
   const setupMenu = (step) => {
     const steps = {
-      0: <NumbersConfiguration handleSetupStep={handleSetupStep} />,
+      0: (
+        <NumbersConfiguration
+          handleSetupStep={handleSetupStep}
+          setIsSetupFinised={setIsSetupFinised}
+        />
+      ),
       1: <NamesConfiguration handleSetupStep={handleSetupStep} />,
       2: <AlternativeConfiguration handleSetupStep={handleSetupStep} />,
       3: <CriteriaConfiguration handleSetupStep={handleSetupStep} />,

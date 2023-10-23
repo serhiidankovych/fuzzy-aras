@@ -1,7 +1,7 @@
 import {
   SET_CRITERIA_LT,
-  ADD_CRITERIA,
-  UPDATE_CRITERIA,
+  ADD_CRITERIA_LT,
+  UPDATE_CRITERIA_LT,
 } from "../actions/criteriaConfigurationActions";
 
 const initialState = {};
@@ -14,7 +14,7 @@ const criteriaConfigurationReducer = (state = initialState, action) => {
         criteriaLinguisticTerms: action.payload,
       };
 
-    case ADD_CRITERIA:
+    case ADD_CRITERIA_LT:
       return {
         ...state,
         criteriaLinguisticTerms: [
@@ -23,7 +23,7 @@ const criteriaConfigurationReducer = (state = initialState, action) => {
         ],
       };
 
-    case UPDATE_CRITERIA:
+    case UPDATE_CRITERIA_LT:
       const updatedTerms = state.criteriaLinguisticTerms.map((term) =>
         term.criteriaLinguisticTerms === action.payload.criteriaLinguisticTerms
           ? action.payload

@@ -1,7 +1,7 @@
 import {
   SET_ALTERNATIVES_LT,
-  ADD_ALTERNATIVE,
-  UPDATE_ALTERNATIVE,
+  ADD_ALTERNATIVE_LT,
+  UPDATE_ALTERNATIVE_LT,
 } from "../actions/alternativeConfigurationActions";
 
 const initialState = {
@@ -16,7 +16,7 @@ const alternativeConfigurationReducer = (state = initialState, action) => {
         alternativeLinguisticTerms: action.payload,
       };
 
-    case ADD_ALTERNATIVE:
+    case ADD_ALTERNATIVE_LT:
       return {
         ...state,
         alternativeLinguisticTerms: [
@@ -25,7 +25,7 @@ const alternativeConfigurationReducer = (state = initialState, action) => {
         ],
       };
 
-    case UPDATE_ALTERNATIVE:
+    case UPDATE_ALTERNATIVE_LT:
       const updatedTerms = state.alternativeLinguisticTerms.map((term) =>
         term.alternativeLinguisticTerms ===
         action.payload.alternativeLinguisticTerms

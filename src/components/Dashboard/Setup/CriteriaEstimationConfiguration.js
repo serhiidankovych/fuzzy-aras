@@ -18,11 +18,13 @@ import {
 import { IoArrowForward, IoArrowBackOutline } from "react-icons/io5";
 
 import { useDispatch, useSelector } from "react-redux";
+import { setCriteriaEstimationConfiguration } from "../../../store/actions/criteriaEstimationConfigurationActions";
 
 export default function CriteriaEstimationConfiguration({
   handleSetupStep,
   setIsSetupFinised,
 }) {
+  const dispatch = useDispatch();
   const generatedCriteriaEstimation = useSelector(
     (state) => state.criteriaEstimationConfiguration
   );
@@ -36,7 +38,7 @@ export default function CriteriaEstimationConfiguration({
   const [criteriaEstimations, setCriteriaEstimations] = React.useState(
     generatedCriteriaEstimation.criteriaEstimation || []
   );
-
+  const [selectedItems, setSelectedItems] = React.useState({});
   const itemsPerPage = 1;
 
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -50,11 +52,11 @@ export default function CriteriaEstimationConfiguration({
 
   const handleSetCriteriaEstimations = () => {
     setIsSetupFinised(true);
+    dispatch(setCriteriaEstimationConfiguration(selectedItems));
   };
   const handlePageChange = (event, newPage) => {
     setCurrentPage(newPage);
   };
-  const [selectedItems, setSelectedItems] = React.useState({});
 
   const handleSelectChange = (event, id) => {
     setSelectedItems((prevState) => ({

@@ -8,11 +8,16 @@ import Slider from "@mui/material/Slider";
 
 import { IoArrowForward } from "react-icons/io5";
 
+import DatasetConfiguration from "./DatasetConfiguration";
+
 import { useDispatch, useSelector } from "react-redux";
 import { setNumberConfiguration } from "../../../store/actions/numberConfigurationActions";
 import { setNameConfiguration } from "../../../store/actions/nameConfigurationActions";
 
-export default function NumberConfiguration({ handleSetupStep }) {
+export default function NumberConfiguration({
+  handleSetupStep,
+  setIsSetupFinised,
+}) {
   const initialNumbers = useSelector((state) => state.numberConfiguration);
   const [numberOfAlternatives, setNumberOfAlternatives] = React.useState(
     initialNumbers.numberOfAlternatives || 3
@@ -91,6 +96,7 @@ export default function NumberConfiguration({ handleSetupStep }) {
           gap: "8px",
         }}
       >
+        <DatasetConfiguration setIsSetupFinised={setIsSetupFinised} />
         <Typography variant="h6">Provide input numbers</Typography>
         <Box
           component="span"
