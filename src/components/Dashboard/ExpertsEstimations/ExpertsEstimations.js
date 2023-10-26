@@ -22,7 +22,7 @@ import { IoArrowForward, IoArrowBackOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { setExpertsEstimationConfiguration } from "../../../store/actions/expertsEstimationConfigurationActions";
 
-export default function ExpertsEstimations() {
+export default function ExpertsEstimations({ setAggregatedEstimations }) {
   const alternativesLinguisticTerms = useSelector(
     (state) => state.alternativeConfiguration
   );
@@ -44,24 +44,30 @@ export default function ExpertsEstimations() {
   }, [alternativesLinguisticTerms]);
 
   React.useEffect(() => {
-    // Iterate over selectedItems and update the linguisticTerm based on the updated linguisticTerms
-    const updatedSelectedItems = {};
-    Object.keys(selectedItems).forEach((itemId) => {
-      const currentItem = selectedItems[itemId];
-      const updatedOption = linguisticTerms.find(
-        (option) => option.id === currentItem.data.id
-      );
+    // Create a map of linguisticTerm IDs to linguisticTerm objects
+    const linguisticTermsMap = new Map(
+      linguisticTerms.map((term) => [term.id, term])
+    );
 
-      updatedSelectedItems[itemId] = {
-        data: updatedOption,
-        alternative: currentItem.alternative,
-        criteria: currentItem.criteria,
-        expertId: currentItem.expertId,
-      };
-    });
+    // Iterate over selectedItems and update the linguisticTerm based on the updated linguisticTerms
+    const updatedSelectedItems = Object.fromEntries(
+      Object.entries(selectedItems).map(([itemId, currentItem]) => {
+        const updatedOption = linguisticTermsMap.get(currentItem.data.id);
+
+        return [
+          itemId,
+          {
+            data: updatedOption,
+            alternative: currentItem.alternative,
+            criteria: currentItem.criteria,
+            expertId: currentItem.expertId,
+          },
+        ];
+      })
+    );
 
     setSelectedItems(updatedSelectedItems);
-  }, [linguisticTerms]); // Add selectedItems as a dependency if needed, based on your specific use case
+  }, [linguisticTerms]);
 
   const dispatch = useDispatch();
   const itemsPerPage = 1;
@@ -73,6 +79,7 @@ export default function ExpertsEstimations() {
 
   const handleSetExpertEstimations = () => {
     dispatch(setExpertsEstimationConfiguration(selectedItems));
+    aggregateEstimations();
   };
   const handlePageChange = (event, newPage) => {
     setCurrentPage(newPage);
@@ -86,8 +93,32 @@ export default function ExpertsEstimations() {
 
     const updatedSelectedItems = { ...selectedItems };
     updatedSelectedItems[id].data = selectedOption; // Store the entire selected option object.
-
     setSelectedItems(updatedSelectedItems);
+  };
+
+  const aggregateEstimations = () => {
+    const aggregatedEstimations = {};
+    for (const key in selectedItems) {
+      const item = selectedItems[key];
+      const { alternative, criteria, expertId, data } = item;
+      const aggregationKey = `a${alternative}-c${criteria}`;
+
+      // Create the aggregation key if it doesn't exist
+      if (!aggregatedEstimations[aggregationKey]) {
+        aggregatedEstimations[aggregationKey] = {
+          alternative: alternative,
+          criteria: criteria,
+          experts: [expertId],
+          data: [data],
+        };
+      } else {
+        // If the aggregation key already exists, push the data to the existing object
+        aggregatedEstimations[aggregationKey].experts.push(expertId);
+        aggregatedEstimations[aggregationKey].data.push(data);
+      }
+    }
+    console.log(aggregatedEstimations);
+    setAggregatedEstimations(aggregatedEstimations);
   };
 
   const MenuItems = currentExpert.map((expertName, expertIndex) => {

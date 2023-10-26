@@ -15,17 +15,24 @@ export default function Dashboard() {
   const [isSetupFinised, setIsSetupFinised] = React.useState(false);
   const [isDatasetNotUsed, setIsDatasetNotUsed] = React.useState(true);
 
+  const [aggregatedEstimations, setAggregatedEstimations] = React.useState([]);
+
   const handleDisplaySetup = () => {
     setIsSetupOpen((prev) => !prev);
   };
   return (
     <>
       <Header handleDisplaySetup={handleDisplaySetup} />
-      <Container maxWidth="lg" sx={{ height: "100vh" }}>
+      <Container maxWidth="lg">
         {!isSetupFinised && <Start handleDisplaySetup={handleDisplaySetup} />}
         {isSetupFinised && (
           <>
-            <ExpertsEstimations /> <EstimationsAggregator />
+            <ExpertsEstimations
+              setAggregatedEstimations={setAggregatedEstimations}
+            />{" "}
+            <EstimationsAggregator
+              aggregatedEstimations={aggregatedEstimations}
+            />
           </>
         )}
       </Container>

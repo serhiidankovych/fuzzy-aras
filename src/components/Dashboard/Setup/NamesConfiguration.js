@@ -20,7 +20,7 @@ import { generateTriangularValues } from "../../../utils/linguisticTerms";
 
 export default function NamesConfiguration({
   handleSetupStep,
-  isDatasetNotUsed,
+ 
 }) {
   const generatedNames = useSelector((state) => state.nameConfiguration);
   const [tab, setTab] = React.useState("1");
@@ -112,9 +112,7 @@ export default function NamesConfiguration({
       generatedAlternativesTriangularValues
     );
 
-    // if (isDatasetNotUsed) {
-
-    // }
+    
     dispatch(setCriteriaConfiguration([...generatedCriteriaLinguisticTerms]));
 
     dispatch(

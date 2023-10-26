@@ -24,7 +24,6 @@ import { setCriteriaEstimationConfiguration } from "../../../store/actions/crite
 export default function CriteriaEstimationConfiguration({
   handleSetupStep,
   setIsSetupFinised,
-  isDatasetNotUsed,
 }) {
   const dispatch = useDispatch();
   const criteriaEstimation = useSelector(

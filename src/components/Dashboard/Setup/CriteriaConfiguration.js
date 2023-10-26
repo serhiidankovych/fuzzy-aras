@@ -29,7 +29,7 @@ import {
 
 export default function CriteriaConfiguration({
   handleSetupStep,
-  isDatasetNotUsed,
+  
 }) {
   const generatedCriteriaLinguisticTerms = useSelector(
     (state) => state.criteriaConfiguration
