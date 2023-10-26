@@ -13,6 +13,7 @@ import DatasetConfiguration from "./DatasetConfiguration";
 import { useDispatch, useSelector } from "react-redux";
 import { setNumberConfiguration } from "../../../store/actions/numberConfigurationActions";
 import { setNameConfiguration } from "../../../store/actions/nameConfigurationActions";
+import { setMaxMinConfiguration } from "../../../store/actions/maxMinConfigurationActions";
 
 export default function NumberConfiguration({
   handleSetupStep,
@@ -27,6 +28,19 @@ export default function NumberConfiguration({
   const [numberOfCriteria, setNumberOfCriteria] = React.useState(
     initialNumbers.numberOfCriteria || 3
   );
+
+  React.useEffect(() => {
+    setNumberOfCriteria(initialNumbers.numberOfCriteria || 3);
+    setNumberOfAlternatives(initialNumbers.numberOfAlternatives || 3);
+    setNumberOfLinguisticTermsForAlternatives(
+      initialNumbers.numberOfLinguisticTermsForAlternatives || 3
+    );
+    setNumberOfLinguisticTermsForCriteria(
+      initialNumbers.numberOfLinguisticTermsForCriteria || 3
+    );
+
+    setNumberOfExperts(initialNumbers.numberOfExperts || 3);
+  });
   const [
     numberOfLinguisticTermsForAlternatives,
     setNumberOfLinguisticTermsForAlternatives,
@@ -46,6 +60,14 @@ export default function NumberConfiguration({
   const generateNames = (prefix, count) => {
     return Array.from({ length: count }, (_, index) => `${prefix}${index + 1}`);
   };
+  const generateMaxMin = (count) => {
+    const result = {};
+    for (let i = 1; i <= count; i++) {
+      result[`c${i}`] = "Max";
+    }
+    console.log(result);
+    return result;
+  };
 
   const generatedAlternativeNames = generateNames(
     "Alternative",
@@ -61,6 +83,7 @@ export default function NumberConfiguration({
     numberOfLinguisticTermsForCriteria
   );
   const generatedExpertsNames = generateNames("Expert", numberOfExperts);
+  const generatedMaxMin = generateMaxMin(numberOfCriteria);
 
   const handleSetNumbers = () => {
     if (isDatasetNotUsed) {
@@ -83,6 +106,8 @@ export default function NumberConfiguration({
         )
       );
     }
+
+    dispatch(setMaxMinConfiguration(generatedMaxMin));
 
     handleSetupStep(true);
   };

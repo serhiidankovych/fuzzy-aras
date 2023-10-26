@@ -23,6 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setExpertsEstimationConfiguration } from "../../../store/actions/expertsEstimationConfigurationActions";
 
 export default function ExpertsEstimations({ setAggregatedEstimations }) {
+  //generate experts estimations
   const alternativesLinguisticTerms = useSelector(
     (state) => state.alternativeConfiguration
   );
@@ -92,7 +93,9 @@ export default function ExpertsEstimations({ setAggregatedEstimations }) {
     );
 
     const updatedSelectedItems = { ...selectedItems };
-    updatedSelectedItems[id].data = selectedOption; // Store the entire selected option object.
+    if (updatedSelectedItems[id]) {
+      updatedSelectedItems[id].data = selectedOption; // Store the entire selected option object.
+    }
     setSelectedItems(updatedSelectedItems);
   };
 

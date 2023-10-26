@@ -9,6 +9,7 @@ import NamesConfiguration from "./NamesConfiguration";
 import CriteriaConfiguration from "./CriteriaConfiguration";
 import AlternativeConfiguration from "./AlternativeConfiguration";
 import CriteriaEstimationConfiguration from "./CriteriaEstimationConfiguration";
+import MaxMinConfiguration from "./MaxMinConfiguration";
 
 export default function Setup({
   isSetupOpen,
@@ -38,9 +39,10 @@ export default function Setup({
         />
       ),
       1: <NamesConfiguration handleSetupStep={handleSetupStep} />,
-      2: <AlternativeConfiguration handleSetupStep={handleSetupStep} />,
-      3: <CriteriaConfiguration handleSetupStep={handleSetupStep} />,
-      4: (
+      2: <MaxMinConfiguration handleSetupStep={handleSetupStep} />,
+      3: <AlternativeConfiguration handleSetupStep={handleSetupStep} />,
+      4: <CriteriaConfiguration handleSetupStep={handleSetupStep} />,
+      5: (
         <CriteriaEstimationConfiguration
           handleSetupStep={handleSetupStep}
           setIsSetupFinised={setIsSetupFinised}
