@@ -21,16 +21,25 @@ import { IoArrowForward, IoArrowBackOutline } from "react-icons/io5";
 
 import { useDispatch, useSelector } from "react-redux";
 import { setExpertsEstimationConfiguration } from "../../../store/actions/expertsEstimationConfigurationActions";
+import { getIntervalValuedNumbers } from "../../../utils/expertEstimations";
+export default function ExpertsEstimations({
+  setAggregatedEstimations,
+  setCriteriaIntervalValuedNumbers,
 
-export default function ExpertsEstimations({ setAggregatedEstimations }) {
-  //generate experts estimations
+  setIsResultsShown,
+}) {
   const alternativesLinguisticTerms = useSelector(
     (state) => state.alternativeConfiguration
   );
 
   const names = useSelector((state) => state.nameConfiguration);
+
   const expertsEstimations = useSelector(
     (state) => state.expertsEstimationConfiguration
+  );
+
+  const criteriaEstimation = useSelector(
+    (state) => state.criteriaEstimationConfiguration
   );
 
   const [linguisticTerms, setLinguisticTerms] = React.useState(
@@ -80,7 +89,17 @@ export default function ExpertsEstimations({ setAggregatedEstimations }) {
 
   const handleSetExpertEstimations = () => {
     dispatch(setExpertsEstimationConfiguration(selectedItems));
+
     aggregateEstimations();
+
+    setCriteriaIntervalValuedNumbers(
+      getIntervalValuedNumbers(
+        criteriaEstimation.criteriaEstimation,
+        names.expertIndices.length
+      )
+    );
+
+    setIsResultsShown(true);
   };
   const handlePageChange = (event, newPage) => {
     setCurrentPage(newPage);
@@ -120,7 +139,7 @@ export default function ExpertsEstimations({ setAggregatedEstimations }) {
         aggregatedEstimations[aggregationKey].data.push(data);
       }
     }
-    console.log(aggregatedEstimations);
+
     setAggregatedEstimations(aggregatedEstimations);
   };
 
@@ -138,11 +157,8 @@ export default function ExpertsEstimations({ setAggregatedEstimations }) {
                   value={selectedItems[itemId]?.data?.linguisticTerm || ""}
                   onChange={(event) => handleSelectChange(event, itemId)}
                 >
-                  {linguisticTerms.map((option) => (
-                    <MenuItem
-                      key={option.linguisticTerm}
-                      value={option.linguisticTerm}
-                    >
+                  {linguisticTerms.map((option, optionIndex) => (
+                    <MenuItem key={optionIndex} value={option.linguisticTerm}>
                       {option.linguisticTerm}
                     </MenuItem>
                   ))}

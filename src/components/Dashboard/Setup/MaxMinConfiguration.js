@@ -73,8 +73,6 @@ export default function MaxMinConfiguration({ handleSetupStep }) {
     { id: 2, function: "Min" },
   ];
 
-  console.log(selectedItems);
-
   const MenuItems = names.criteriaNames.map((criteriaName, criteriaIndex) => {
     const itemId = `c${criteriaIndex + 1}`;
     return (

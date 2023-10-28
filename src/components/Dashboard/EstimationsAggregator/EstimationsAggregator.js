@@ -135,7 +135,6 @@ export default function ExpertsEstimations({ aggregatedEstimations }) {
           paddingLeft: "8px",
         }}
       ></Box>
-      {/* <Typography variant="h6">Linguistic terms form:</Typography> */}
 
       <TableContainer component={Paper}>
         <Table>
@@ -156,7 +155,7 @@ export default function ExpertsEstimations({ aggregatedEstimations }) {
 
       {isDetailsShown && (
         <>
-          <Typography variant="h6">Triangular form:</Typography>
+          <Typography variant="h6">Triangular form</Typography>
           <TableContainer component={Paper}>
             <Table>
               <TableHead>
