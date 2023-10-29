@@ -21,10 +21,15 @@ import { IoArrowForward, IoArrowBackOutline } from "react-icons/io5";
 
 import { useDispatch, useSelector } from "react-redux";
 import { setExpertsEstimationConfiguration } from "../../../store/actions/expertsEstimationConfigurationActions";
-import { getIntervalValuedNumbers } from "../../../utils/expertEstimations";
+import {
+  getCriteriaIntervalValuedNumbers,
+  aggregateEstimations,
+  getAlternativesIntervalValuedNumbers,
+} from "../../../utils/expertEstimations";
 export default function ExpertsEstimations({
   setAggregatedEstimations,
   setCriteriaIntervalValuedNumbers,
+  setAlternativesIntervalValuedNumbers,
 
   setIsResultsShown,
 }) {
@@ -37,7 +42,7 @@ export default function ExpertsEstimations({
   const expertsEstimations = useSelector(
     (state) => state.expertsEstimationConfiguration
   );
-
+  //update in change
   const criteriaEstimation = useSelector(
     (state) => state.criteriaEstimationConfiguration
   );
@@ -48,6 +53,8 @@ export default function ExpertsEstimations({
   const [selectedItems, setSelectedItems] = React.useState(
     expertsEstimations.expertsEstimation || {}
   );
+  // const [aggregatedIntervalValuedNumbers, setAggregatedIntervalValuedNumbers] =
+  //   React.useState({});
 
   React.useEffect(() => {
     setLinguisticTerms(alternativesLinguisticTerms.alternativeLinguisticTerms);
@@ -90,14 +97,28 @@ export default function ExpertsEstimations({
   const handleSetExpertEstimations = () => {
     dispatch(setExpertsEstimationConfiguration(selectedItems));
 
-    aggregateEstimations();
+    const aggregatedEstimations = aggregateEstimations(selectedItems);
+
+    setAggregatedEstimations(aggregatedEstimations);
+    // setAggregatedIntervalValuedNumbers(aggregateEstimations(selectedItems));
 
     setCriteriaIntervalValuedNumbers(
-      getIntervalValuedNumbers(
+      getCriteriaIntervalValuedNumbers(
         criteriaEstimation.criteriaEstimation,
         names.expertIndices.length
       )
     );
+
+    setAlternativesIntervalValuedNumbers(
+      getAlternativesIntervalValuedNumbers(
+        aggregateEstimations(selectedItems),
+        names.expertIndices.length
+      )
+    );
+    // getAlternativesIntervalValuedNumbers(
+    //   aggregatedEstimations,
+    //   names.expertIndices.length
+    // );
 
     setIsResultsShown(true);
   };
@@ -116,31 +137,6 @@ export default function ExpertsEstimations({
       updatedSelectedItems[id].data = selectedOption; // Store the entire selected option object.
     }
     setSelectedItems(updatedSelectedItems);
-  };
-
-  const aggregateEstimations = () => {
-    const aggregatedEstimations = {};
-    for (const key in selectedItems) {
-      const item = selectedItems[key];
-      const { alternative, criteria, expertId, data } = item;
-      const aggregationKey = `a${alternative}-c${criteria}`;
-
-      // Create the aggregation key if it doesn't exist
-      if (!aggregatedEstimations[aggregationKey]) {
-        aggregatedEstimations[aggregationKey] = {
-          alternative: alternative,
-          criteria: criteria,
-          experts: [expertId],
-          data: [data],
-        };
-      } else {
-        // If the aggregation key already exists, push the data to the existing object
-        aggregatedEstimations[aggregationKey].experts.push(expertId);
-        aggregatedEstimations[aggregationKey].data.push(data);
-      }
-    }
-
-    setAggregatedEstimations(aggregatedEstimations);
   };
 
   const MenuItems = currentExpert.map((expertName, expertIndex) => {

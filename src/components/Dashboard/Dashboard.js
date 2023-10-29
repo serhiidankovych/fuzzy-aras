@@ -10,6 +10,7 @@ import Setup from "./Setup/Setup";
 import ExpertsEstimations from "./ExpertsEstimations/ExpertsEstimations";
 import EstimationsAggregator from "./EstimationsAggregator/EstimationsAggregator";
 import CriteriaIntervalValued from "./IntervalValuedTransformer/CriteriaIntervalValued";
+import AlternativesIntervalValued from "./IntervalValuedTransformer/AlternativesIntervalValued";
 
 export default function Dashboard() {
   const [isSetupOpen, setIsSetupOpen] = React.useState(false);
@@ -20,6 +21,10 @@ export default function Dashboard() {
   const [aggregatedEstimations, setAggregatedEstimations] = React.useState([]);
   const [criteriaIntervalValuedNumbers, setCriteriaIntervalValuedNumbers] =
     React.useState([]);
+  const [
+    alternativesIntervalValuedNumbers,
+    setAlternativesIntervalValuedNumbers,
+  ] = React.useState([]);
 
   const handleDisplaySetup = () => {
     setIsSetupOpen((prev) => !prev);
@@ -36,6 +41,9 @@ export default function Dashboard() {
               setCriteriaIntervalValuedNumbers={
                 setCriteriaIntervalValuedNumbers
               }
+              setAlternativesIntervalValuedNumbers={
+                setAlternativesIntervalValuedNumbers
+              }
               setIsResultsShown={setIsResultsShown}
             />
             {isResultsShown && (
@@ -45,6 +53,11 @@ export default function Dashboard() {
                 />
                 <CriteriaIntervalValued
                   criteriaIntervalValuedNumbers={criteriaIntervalValuedNumbers}
+                />
+                <AlternativesIntervalValued
+                  alternativesIntervalValuedNumbers={
+                    alternativesIntervalValuedNumbers
+                  }
                 />
               </>
             )}

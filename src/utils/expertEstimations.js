@@ -1,25 +1,25 @@
-const generateExpertEstimations = (names, type) => {
-  const generatedExpertEstimations = [];
+const generateExpertEstimations = (
+  expertNumbers,
+  alternativeNumbers,
+  criteriaNumbers
+) => {
+  const generatedExpertEstimations = {};
 
-  const expertNames = names?.expertNames;
-  const alternativeNames = names?.alternativeNames;
-  const criteriaNames = names?.criteriaNames;
-
-  const isExpertsType = type === "experts";
-
-  const namesArray = isExpertsType ? expertNames : alternativeNames;
-
-  if (namesArray && criteriaNames) {
-    for (let i = 0; i < namesArray.length; i++) {
-      for (let j = 0; j < criteriaNames.length; j++) {
-        const labelPrefix = isExpertsType ? "e" : "a";
-        generatedExpertEstimations.push({
-          id: `${labelPrefix}${i + 1}-c${j + 1}`,
-          label: `${labelPrefix}${i + 1}-c${j + 1}`,
-          alternative: `${labelPrefix}${i + 1}`,
-          criteria: `c${j + 1}`,
-          selectedLinguisticTerms: [],
-        });
+  for (let i = 0; i < expertNumbers; i++) {
+    for (let j = 0; j < alternativeNumbers; j++) {
+      for (let y = 0; y < criteriaNumbers; y++) {
+        const key = `e${i + 1}-a${j + 1}-c${y + 1}`;
+        generatedExpertEstimations[key] = {
+          data: {
+            id: 0,
+            linguisticTerm: "",
+            confines: [0, 0, 0],
+            normalizedConfines: [0, 0, 0],
+          },
+          criteria: y + 1,
+          alternative: j + 1,
+          expertId: i + 1,
+        };
       }
     }
   }
@@ -50,10 +50,92 @@ const findMaxValues = (data) => {
 };
 
 const calculatePerformanceRating = (confines, experts) => {
-  return Math.pow(confines[0] * confines[1] * confines[2], 1 / experts);
+  const multiplyConfines = confines.reduce((accumulator, currentValue) => {
+    return accumulator * currentValue;
+  }, 1);
+
+  return Math.pow(multiplyConfines, 1 / experts);
 };
 
-const getIntervalValuedNumbers = (estimation, experts) => {
+const getAlternativesIntervalValuedNumbers = (estimation, experts) => {
+  const intervalValuedNumbers = {};
+
+  const leftConfines = {};
+  const middleConfines = {};
+  const rightConfines = {};
+
+  const leftPerformanceRating = {};
+  const middlePerformanceRating = {};
+  const rightPerformanceRating = {};
+
+  console.log(estimation);
+  Object.keys(estimation).forEach((itemId) => {
+    estimation[itemId].data.forEach((item) => {
+      const left = item.normalizedConfines[0];
+      const middle = item.normalizedConfines[1];
+      const right = item.normalizedConfines[2];
+
+      const criteriaKey = itemId;
+
+      if (!leftConfines[criteriaKey]) {
+        leftConfines[criteriaKey] = [];
+      }
+
+      if (!rightConfines[criteriaKey]) {
+        rightConfines[criteriaKey] = [];
+      }
+      if (!middleConfines[criteriaKey]) {
+        middleConfines[criteriaKey] = [];
+      }
+
+      leftConfines[criteriaKey].push(left);
+      middleConfines[criteriaKey].push(middle);
+      rightConfines[criteriaKey].push(right);
+
+      if (!leftPerformanceRating[criteriaKey]) {
+        leftPerformanceRating[criteriaKey] = [];
+      }
+
+      if (!middlePerformanceRating[criteriaKey]) {
+        middlePerformanceRating[criteriaKey] = [];
+      }
+      if (!rightPerformanceRating[criteriaKey]) {
+        rightPerformanceRating[criteriaKey] = [];
+      }
+
+      leftPerformanceRating[criteriaKey] = calculatePerformanceRating(
+        leftConfines[criteriaKey],
+        experts
+      );
+      middlePerformanceRating[criteriaKey] = calculatePerformanceRating(
+        middleConfines[criteriaKey],
+        experts
+      );
+      rightPerformanceRating[criteriaKey] = calculatePerformanceRating(
+        rightConfines[criteriaKey],
+        experts
+      );
+    });
+
+    return intervalValuedNumbers;
+  });
+  const minLeftConfines = findMinValues(leftConfines);
+  const maxRightConfines = findMaxValues(rightConfines);
+
+  Object.keys(minLeftConfines).forEach((itemId) => {
+    intervalValuedNumbers[itemId] = [
+      minLeftConfines[itemId],
+      leftPerformanceRating[itemId],
+      middlePerformanceRating[itemId],
+      rightPerformanceRating[itemId],
+      maxRightConfines[itemId],
+    ];
+  });
+  console.log(intervalValuedNumbers);
+  return intervalValuedNumbers;
+};
+
+const getCriteriaIntervalValuedNumbers = (estimation, experts) => {
   const intervalValuedNumbers = {};
   const leftConfines = {};
   const middleConfines = {};
@@ -66,9 +148,9 @@ const getIntervalValuedNumbers = (estimation, experts) => {
   Object.keys(estimation).forEach((itemId) => {
     const currentItem = estimation[itemId];
 
-    const left = currentItem.confines[0];
-    const middle = currentItem.confines[1];
-    const right = currentItem.confines[2];
+    const left = currentItem.normalizedConfines[0];
+    const middle = currentItem.normalizedConfines[1];
+    const right = currentItem.normalizedConfines[2];
 
     const key = itemId.split("-");
     const criteriaKey = key[1];
@@ -91,6 +173,14 @@ const getIntervalValuedNumbers = (estimation, experts) => {
     if (!leftPerformanceRating[criteriaKey]) {
       leftPerformanceRating[criteriaKey] = [];
     }
+
+    if (!middlePerformanceRating[criteriaKey]) {
+      middlePerformanceRating[criteriaKey] = [];
+    }
+    if (!rightPerformanceRating[criteriaKey]) {
+      rightPerformanceRating[criteriaKey] = [];
+    }
+
     leftPerformanceRating[criteriaKey] = calculatePerformanceRating(
       leftConfines[criteriaKey],
       experts
@@ -121,4 +211,33 @@ const getIntervalValuedNumbers = (estimation, experts) => {
   return intervalValuedNumbers;
 };
 
-export { generateExpertEstimations, getIntervalValuedNumbers };
+const aggregateEstimations = (selectedItems) => {
+  const aggregatedEstimations = {};
+  for (const key in selectedItems) {
+    const item = selectedItems[key];
+    const { alternative, criteria, expertId, data } = item;
+    const aggregationKey = `a${alternative}-c${criteria}`;
+
+    // Create the aggregation key if it doesn't exist
+    if (!aggregatedEstimations[aggregationKey]) {
+      aggregatedEstimations[aggregationKey] = {
+        alternative: alternative,
+        criteria: criteria,
+        experts: [expertId],
+        data: [data],
+      };
+    } else {
+      // If the aggregation key already exists, push the data to the existing object
+      aggregatedEstimations[aggregationKey].experts.push(expertId);
+      aggregatedEstimations[aggregationKey].data.push(data);
+    }
+  }
+  return aggregatedEstimations;
+};
+
+export {
+  generateExpertEstimations,
+  getCriteriaIntervalValuedNumbers,
+  getAlternativesIntervalValuedNumbers,
+  aggregateEstimations,
+};

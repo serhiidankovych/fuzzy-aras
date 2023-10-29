@@ -22,21 +22,25 @@ export default function CriteriaIntervalValued({
   const criteriaEstimation = useSelector(
     (state) => state.criteriaEstimationConfiguration
   );
-  console.log(criteriaEstimation);
+
   const names = useSelector((state) => state.nameConfiguration);
 
   const [isDetailsShown, setIsDetailsShown] = React.useState(false);
   const [criteriaIntervalValuedNames, setCriteriaIntervalValuedNames] =
-    React.useState(["Criteria ♛", ...names.criteriaNames]);
+    React.useState(["Criteria 👑", ...names.criteriaNames]);
+
+  React.useEffect(() => {
+    setCriteriaIntervalValuedNames(["Criteria 👑", ...names.criteriaNames]);
+  }, [names]);
 
   const MenuItemsCriteriaEstimation = names.expertNames.map(
     (expertName, expertIndex) => {
       const criterionCells = names.criteriaNames.map(
         (criteriaName, criteriaIndex) => {
           const itemId = `e${expertIndex + 1}-c${criteriaIndex + 1}`;
-          const confines = criteriaEstimation.criteriaEstimation[
+          const normalizedConfines = criteriaEstimation.criteriaEstimation[
             itemId
-          ]?.confines
+          ]?.normalizedConfines
             .map((border) => border.toFixed(2))
             .join(",");
 
@@ -46,7 +50,7 @@ export default function CriteriaIntervalValued({
               align="center"
               sx={{ minWidth: "115px" }}
             >
-              [{confines}]
+              [{normalizedConfines}]
             </TableCell>
           );
         }

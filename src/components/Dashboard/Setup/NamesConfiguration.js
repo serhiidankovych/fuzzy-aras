@@ -18,10 +18,7 @@ import { setAlternativeConfiguration } from "../../../store/actions/alternativeC
 
 import { generateTriangularValues } from "../../../utils/linguisticTerms";
 
-export default function NamesConfiguration({
-  handleSetupStep,
- 
-}) {
+export default function NamesConfiguration({ handleSetupStep }) {
   const generatedNames = useSelector((state) => state.nameConfiguration);
   const [tab, setTab] = React.useState("1");
   const [names, setNames] = React.useState(generatedNames || []);
@@ -112,7 +109,6 @@ export default function NamesConfiguration({
       generatedAlternativesTriangularValues
     );
 
-    
     dispatch(setCriteriaConfiguration([...generatedCriteriaLinguisticTerms]));
 
     dispatch(

@@ -17,7 +17,7 @@ import { IoChevronDown, IoChevronUp } from "react-icons/io5";
 
 import { useDispatch, useSelector } from "react-redux";
 
-export default function ExpertsEstimations({ aggregatedEstimations }) {
+export default function EstimationsAggregator({ aggregatedEstimations }) {
   const names = useSelector((state) => state.nameConfiguration);
 
   const [isDetailsShown, setIsDetailsShown] = React.useState(false);
@@ -27,7 +27,7 @@ export default function ExpertsEstimations({ aggregatedEstimations }) {
       const criterionCells = names.criteriaNames.map(
         (criteriaName, criteriaIndex) => {
           const itemId = `a${alternativeIndex + 1}-c${criteriaIndex + 1}`;
-          const linguisticTerms = aggregatedEstimations[itemId]?.data.map(
+          const linguisticTerms = aggregatedEstimations[itemId]?.data?.map(
             (estimation) => (
               <div
                 style={{
@@ -72,7 +72,7 @@ export default function ExpertsEstimations({ aggregatedEstimations }) {
       const criterionCells = names.criteriaNames.map(
         (criteriaName, criteriaIndex) => {
           const itemId = `a${alternativeIndex + 1}-c${criteriaIndex + 1}`;
-          const confines = aggregatedEstimations[itemId]?.data.map(
+          const normalizedConfines = aggregatedEstimations[itemId]?.data?.map(
             (estimation) => (
               <div
                 style={{
@@ -80,8 +80,8 @@ export default function ExpertsEstimations({ aggregatedEstimations }) {
                 }}
               >
                 [
-                {estimation.confines
-                  .map((number) => number.toFixed(2))
+                {estimation?.normalizedConfines
+                  ?.map((number) => number.toFixed(2))
                   .join(", ")}
                 ]
               </div>
@@ -94,7 +94,7 @@ export default function ExpertsEstimations({ aggregatedEstimations }) {
               align="center"
               sx={{ minWidth: "115px" }}
             >
-              {confines}
+              {normalizedConfines}
             </TableCell>
           );
         }

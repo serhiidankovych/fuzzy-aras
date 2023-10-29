@@ -14,6 +14,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { setNumberConfiguration } from "../../../store/actions/numberConfigurationActions";
 import { setNameConfiguration } from "../../../store/actions/nameConfigurationActions";
 import { setMaxMinConfiguration } from "../../../store/actions/maxMinConfigurationActions";
+import { setExpertsEstimationConfiguration } from "../../../store/actions/expertsEstimationConfigurationActions";
+
+import { generateExpertEstimations } from "../../../utils/expertEstimations";
+
 import { BsConeStriped } from "react-icons/bs";
 
 export default function NumberConfiguration({
@@ -43,7 +47,6 @@ export default function NumberConfiguration({
     setNumberOfExperts(initialNumbers.numberOfExperts || 3);
   }, [initialNumbers]);
 
-  console.log(initialNumbers);
   const [
     numberOfLinguisticTermsForAlternatives,
     setNumberOfLinguisticTermsForAlternatives,
@@ -85,6 +88,7 @@ export default function NumberConfiguration({
     "cLT",
     numberOfLinguisticTermsForCriteria
   );
+
   const generatedExpertsNames = generateNames("Expert", numberOfExperts);
   const generatedMaxMin = generateMaxMin(numberOfCriteria);
 
@@ -111,6 +115,16 @@ export default function NumberConfiguration({
     }
 
     dispatch(setMaxMinConfiguration(generatedMaxMin));
+
+    dispatch(
+      setExpertsEstimationConfiguration(
+        generateExpertEstimations(
+          numberOfExperts,
+          numberOfAlternatives,
+          numberOfCriteria
+        )
+      )
+    );
 
     handleSetupStep(true);
   };
