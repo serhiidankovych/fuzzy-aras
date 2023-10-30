@@ -27,10 +27,10 @@ export default function CriteriaIntervalValued({
 
   const [isDetailsShown, setIsDetailsShown] = React.useState(false);
   const [criteriaIntervalValuedNames, setCriteriaIntervalValuedNames] =
-    React.useState(["Criteria 👑", ...names.criteriaNames]);
+    React.useState(["Criteria👑", ...names.criteriaNames]);
 
   React.useEffect(() => {
-    setCriteriaIntervalValuedNames(["Criteria 👑", ...names.criteriaNames]);
+    setCriteriaIntervalValuedNames(["Criteria👑", ...names.criteriaNames]);
   }, [names]);
 
   const MenuItemsCriteriaEstimation = names.expertNames.map(

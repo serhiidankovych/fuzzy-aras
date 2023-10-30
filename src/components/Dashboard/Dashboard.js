@@ -55,6 +55,7 @@ export default function Dashboard() {
                   criteriaIntervalValuedNumbers={criteriaIntervalValuedNumbers}
                 />
                 <AlternativesIntervalValued
+                  aggregatedEstimations={aggregatedEstimations}
                   alternativesIntervalValuedNumbers={
                     alternativesIntervalValuedNumbers
                   }

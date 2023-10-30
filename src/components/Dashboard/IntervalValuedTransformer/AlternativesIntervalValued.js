@@ -20,6 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { IoChevronDown, IoChevronUp } from "react-icons/io5";
 export default function AlternativesIntervalValued({
   alternativesIntervalValuedNumbers,
+  aggregatedEstimations,
 }) {
   const criteriaEstimation = useSelector(
     (state) => state.criteriaEstimationConfiguration
@@ -29,10 +30,10 @@ export default function AlternativesIntervalValued({
 
   const [isDetailsShown, setIsDetailsShown] = React.useState(false);
   const [criteriaIntervalValuedNames, setCriteriaIntervalValuedNames] =
-    React.useState(["Criteria 👑", ...names.criteriaNames]);
+    React.useState(["Criteria👑", ...names.criteriaNames]);
 
   React.useEffect(() => {
-    setCriteriaIntervalValuedNames(["Criteria 👑", ...names.criteriaNames]);
+    setCriteriaIntervalValuedNames(["Criteria👑", ...names.criteriaNames]);
   }, [names]);
 
   const itemsPerPage = names.criteriaNames.length;
@@ -48,8 +49,13 @@ export default function AlternativesIntervalValued({
   const MenuItemsIntervalValuedNumbers = Object.keys(
     alternativesIntervalValuedNumbers
   ).map((itemId, itemIndex) => {
+    const criteriaNameKey = itemId.charAt(4);
+
     return (
       <TableRow key={itemIndex}>
+        <TableCell align="center">
+          {names.criteriaNames[criteriaNameKey - 1]}
+        </TableCell>
         {criteriaIntervalValuedNames.map((criteriaName, criteriaIndex) => (
           <TableCell align="center" key={criteriaIndex}>
             {alternativesIntervalValuedNumbers[itemId][criteriaIndex].toFixed(
@@ -64,6 +70,48 @@ export default function AlternativesIntervalValued({
   const slicedMenuItems = MenuItemsIntervalValuedNumbers.slice(
     startIndex,
     endIndex
+  );
+
+  const MenuItemsConfines = names.alternativeNames.map(
+    (alternativeName, alternativeIndex) => {
+      const criterionCells = names.criteriaNames.map(
+        (criteriaName, criteriaIndex) => {
+          const itemId = `a${alternativeIndex + 1}-c${criteriaIndex + 1}`;
+          const normalizedConfines = aggregatedEstimations[itemId]?.data?.map(
+            (estimation) => (
+              <div
+                style={{
+                  textAlign: "center",
+                }}
+              >
+                [
+                {estimation?.normalizedConfines
+                  ?.map((number) => number.toFixed(2))
+                  .join(", ")}
+                ]
+              </div>
+            )
+          );
+
+          return (
+            <TableCell
+              key={criteriaIndex}
+              align="center"
+              sx={{ minWidth: "115px" }}
+            >
+              {normalizedConfines}
+            </TableCell>
+          );
+        }
+      );
+
+      return (
+        <TableRow key={alternativeIndex}>
+          <TableCell align="center">{alternativeName}</TableCell>
+          {criterionCells}
+        </TableRow>
+      );
+    }
   );
 
   return (
@@ -124,7 +172,29 @@ export default function AlternativesIntervalValued({
         shape="rounded"
       />
 
-      {isDetailsShown && <></>}
+      {isDetailsShown && (
+        <>
+          <Typography variant="h6">
+            Alternatives aggregated estimations
+          </Typography>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell align="center">Alternatives</TableCell>
+
+                  {names.criteriaNames.map((criteriaName, criteriaIndex) => (
+                    <TableCell align="center" key={criteriaIndex}>
+                      {criteriaName}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>{MenuItemsConfines}</TableBody>
+            </Table>
+          </TableContainer>
+        </>
+      )}
 
       <Button
         color="gray"

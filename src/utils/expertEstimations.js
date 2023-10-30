@@ -68,7 +68,6 @@ const getAlternativesIntervalValuedNumbers = (estimation, experts) => {
   const middlePerformanceRating = {};
   const rightPerformanceRating = {};
 
-  console.log(estimation);
   Object.keys(estimation).forEach((itemId) => {
     estimation[itemId].data.forEach((item) => {
       const left = item.normalizedConfines[0];
@@ -131,7 +130,7 @@ const getAlternativesIntervalValuedNumbers = (estimation, experts) => {
       maxRightConfines[itemId],
     ];
   });
-  console.log(intervalValuedNumbers);
+
   return intervalValuedNumbers;
 };
 

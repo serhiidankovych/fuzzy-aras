@@ -153,7 +153,7 @@ export default function EstimationsAggregator({ aggregatedEstimations }) {
         </Table>
       </TableContainer>
 
-      {isDetailsShown && (
+      {/* {isDetailsShown && (
         <>
           <Typography variant="h6">Triangular form</Typography>
           <TableContainer component={Paper}>
@@ -173,15 +173,15 @@ export default function EstimationsAggregator({ aggregatedEstimations }) {
             </Table>
           </TableContainer>
         </>
-      )}
+      )} */}
 
-      <Button
+      {/* <Button
         color="gray"
         startIcon={isDetailsShown ? <IoChevronUp /> : <IoChevronDown />}
         onClick={() => setIsDetailsShown((prev) => !prev)}
       >
         {isDetailsShown ? "Hide" : "Show"} details
-      </Button>
+      </Button> */}
     </Box>
   );
 }
