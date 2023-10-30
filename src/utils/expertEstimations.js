@@ -234,9 +234,38 @@ const aggregateEstimations = (selectedItems) => {
   return aggregatedEstimations;
 };
 
+const getCriteriaOptimalValue = (alternativesIntervalValuedNumbers, maxMin) => {
+  const criteriaValues = {};
+  const criteriaOptimalValues = {};
+
+  Object.keys(alternativesIntervalValuedNumbers).forEach((itemId) => {
+    const currentItem = alternativesIntervalValuedNumbers[itemId];
+    const [_, criteriaKey] = itemId.split("-");
+
+    criteriaValues[criteriaKey] = criteriaValues[criteriaKey] || [];
+    criteriaValues[criteriaKey].push(currentItem);
+  });
+
+  Object.keys(criteriaValues).forEach((criteriaKey) => {
+    const currentItem = criteriaValues[criteriaKey];
+    const isMax = maxMin[criteriaKey] === "Max";
+
+    const optimalValue = currentItem[0].map((_, colIndex) =>
+      isMax
+        ? Math.max(...currentItem.map((row) => row[colIndex]))
+        : Math.min(...currentItem.map((row) => row[colIndex]))
+    );
+
+    criteriaOptimalValues[criteriaKey] = optimalValue;
+  });
+
+  return criteriaOptimalValues;
+};
+
 export {
   generateExpertEstimations,
   getCriteriaIntervalValuedNumbers,
   getAlternativesIntervalValuedNumbers,
   aggregateEstimations,
+  getCriteriaOptimalValue,
 };

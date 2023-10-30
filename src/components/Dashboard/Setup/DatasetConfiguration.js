@@ -11,6 +11,7 @@ import { setCriteriaConfiguration } from "../../../store/actions/criteriaConfigu
 import { setAlternativeConfiguration } from "../../../store/actions/alternativeConfigurationActions";
 import { setCriteriaEstimationConfiguration } from "../../../store/actions/criteriaEstimationConfigurationActions";
 import { setExpertsEstimationConfiguration } from "../../../store/actions/expertsEstimationConfigurationActions";
+import { setMaxMinConfiguration } from "../../../store/actions/maxMinConfigurationActions";
 import { useDispatch, useSelector } from "react-redux";
 import {
   numberOfAlternatives,
@@ -23,6 +24,7 @@ import {
   alternativesLinguisticTerms,
   criteriaEstimations,
   expertsEstimations,
+  maxMin,
 } from "../../../templates/dataset1";
 
 export default function DatasetConfiguration({
@@ -62,6 +64,7 @@ export default function DatasetConfiguration({
     dispatch(setAlternativeConfiguration(alternativesLinguisticTerms));
     dispatch(setCriteriaEstimationConfiguration(criteriaEstimations));
     dispatch(setExpertsEstimationConfiguration(expertsEstimations));
+    dispatch(setMaxMinConfiguration(maxMin));
     setIsSetupFinised(true);
     setIsDatasetNotUsed(false);
   };

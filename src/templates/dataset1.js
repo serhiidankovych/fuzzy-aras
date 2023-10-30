@@ -31,6 +31,13 @@ export const names = {
   ],
 };
 
+export const maxMin = {
+  c1: "Max",
+  c2: "Max",
+  c3: "Max",
+  c4: "Max",
+};
+
 export const criteriaLinguisticTerms = [
   {
     id: 0,

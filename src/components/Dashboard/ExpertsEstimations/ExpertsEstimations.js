@@ -25,12 +25,14 @@ import {
   getCriteriaIntervalValuedNumbers,
   aggregateEstimations,
   getAlternativesIntervalValuedNumbers,
+  getCriteriaOptimalValue,
 } from "../../../utils/expertEstimations";
+
 export default function ExpertsEstimations({
   setAggregatedEstimations,
   setCriteriaIntervalValuedNumbers,
   setAlternativesIntervalValuedNumbers,
-
+  setCriteriaOptimalValuedNumbers,
   setIsResultsShown,
 }) {
   const alternativesLinguisticTerms = useSelector(
@@ -46,6 +48,7 @@ export default function ExpertsEstimations({
   const criteriaEstimation = useSelector(
     (state) => state.criteriaEstimationConfiguration
   );
+  const maxMin = useSelector((state) => state.maxMinConfiguration);
 
   const [linguisticTerms, setLinguisticTerms] = React.useState(
     alternativesLinguisticTerms.alternativeLinguisticTerms || {}
@@ -53,8 +56,6 @@ export default function ExpertsEstimations({
   const [selectedItems, setSelectedItems] = React.useState(
     expertsEstimations.expertsEstimation || {}
   );
-  // const [aggregatedIntervalValuedNumbers, setAggregatedIntervalValuedNumbers] =
-  //   React.useState({});
 
   React.useEffect(() => {
     setLinguisticTerms(alternativesLinguisticTerms.alternativeLinguisticTerms);
@@ -94,13 +95,16 @@ export default function ExpertsEstimations({
   const endIndex = startIndex + itemsPerPage;
   const currentExpert = names.expertIndices.slice(startIndex, endIndex);
 
+  const handlePageChange = (event, newPage) => {
+    setCurrentPage(newPage);
+  };
+
   const handleSetExpertEstimations = () => {
     dispatch(setExpertsEstimationConfiguration(selectedItems));
 
     const aggregatedEstimations = aggregateEstimations(selectedItems);
 
     setAggregatedEstimations(aggregatedEstimations);
-    // setAggregatedIntervalValuedNumbers(aggregateEstimations(selectedItems));
 
     setCriteriaIntervalValuedNumbers(
       getCriteriaIntervalValuedNumbers(
@@ -108,22 +112,18 @@ export default function ExpertsEstimations({
         names.expertIndices.length
       )
     );
-
-    setAlternativesIntervalValuedNumbers(
+    const alternativesIntervalValuedNumbers =
       getAlternativesIntervalValuedNumbers(
         aggregateEstimations(selectedItems),
         names.expertIndices.length
-      )
+      );
+    setAlternativesIntervalValuedNumbers(alternativesIntervalValuedNumbers);
+
+    setCriteriaOptimalValuedNumbers(
+      getCriteriaOptimalValue(alternativesIntervalValuedNumbers, maxMin.maxMin)
     );
-    // getAlternativesIntervalValuedNumbers(
-    //   aggregatedEstimations,
-    //   names.expertIndices.length
-    // );
 
     setIsResultsShown(true);
-  };
-  const handlePageChange = (event, newPage) => {
-    setCurrentPage(newPage);
   };
 
   const handleSelectChange = (event, id) => {

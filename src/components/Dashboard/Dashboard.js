@@ -11,6 +11,7 @@ import ExpertsEstimations from "./ExpertsEstimations/ExpertsEstimations";
 import EstimationsAggregator from "./EstimationsAggregator/EstimationsAggregator";
 import CriteriaIntervalValued from "./IntervalValuedTransformer/CriteriaIntervalValued";
 import AlternativesIntervalValued from "./IntervalValuedTransformer/AlternativesIntervalValued";
+import CriteriaOptimalValued from "./CriteriaOptimalValued/CriteriaOptimalValued";
 
 export default function Dashboard() {
   const [isSetupOpen, setIsSetupOpen] = React.useState(false);
@@ -25,6 +26,9 @@ export default function Dashboard() {
     alternativesIntervalValuedNumbers,
     setAlternativesIntervalValuedNumbers,
   ] = React.useState([]);
+
+  const [criteriaOptimalValuedNumbers, setCriteriaOptimalValuedNumbers] =
+    React.useState([]);
 
   const handleDisplaySetup = () => {
     setIsSetupOpen((prev) => !prev);
@@ -44,6 +48,7 @@ export default function Dashboard() {
               setAlternativesIntervalValuedNumbers={
                 setAlternativesIntervalValuedNumbers
               }
+              setCriteriaOptimalValuedNumbers={setCriteriaOptimalValuedNumbers}
               setIsResultsShown={setIsResultsShown}
             />
             {isResultsShown && (
@@ -59,6 +64,9 @@ export default function Dashboard() {
                   alternativesIntervalValuedNumbers={
                     alternativesIntervalValuedNumbers
                   }
+                />
+                <CriteriaOptimalValued
+                  criteriaOptimalValuedNumbers={criteriaOptimalValuedNumbers}
                 />
               </>
             )}
