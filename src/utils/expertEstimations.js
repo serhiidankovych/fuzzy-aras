@@ -333,11 +333,11 @@ const getAlternativesOptimalValue = (
     normalizedValues[key] = elementsNormalized;
   }
 
-  // console.log(alternativesValues);
-  // console.log(reversedAlternativesValues);
-  // console.log(normalizedValues);
-  // console.log(sumLastElements);
-  // console.log(sumFirstElements);
+  //
+  //
+  //
+  //
+  //
 
   return normalizedValues;
 };

@@ -18,9 +18,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 
 import { IoChevronDown, IoChevronUp } from "react-icons/io5";
-export default function AlternativesOptimalValued({
-  alternativesOptimalValuedNumbers,
-}) {
+export default function NormalizedWeightedMatrix({ normalizedWeightedMatrix }) {
   const criteriaEstimation = useSelector(
     (state) => state.criteriaEstimationConfiguration
   );
@@ -55,12 +53,12 @@ export default function AlternativesOptimalValued({
   };
 
   const MenuItemsOptimalValuedNumbers = Object.keys(
-    alternativesOptimalValuedNumbers
+    normalizedWeightedMatrix
   ).map((itemId, itemIndex) => {
     const alternativeKey = itemId.charAt(1);
 
     const alternativeName = alternativesOptimalValuedNames[alternativeKey - 1];
-    const subArrays = alternativesOptimalValuedNumbers[itemId];
+    const subArrays = normalizedWeightedMatrix[itemId];
     const elementsReversed = subArrays.map((subArray, rowIndex) => (
       <TableRow key={rowIndex}>
         <TableCell align="center">
@@ -97,7 +95,7 @@ export default function AlternativesOptimalValued({
         marginTop: "20px",
       }}
     >
-      <Typography variant="h5">Normalized decision matrix</Typography>
+      <Typography variant="h5">Normalized-weighted decision matrix</Typography>
 
       <Box
         sx={{
@@ -131,7 +129,7 @@ export default function AlternativesOptimalValued({
 
       <Pagination
         count={Math.ceil(
-          Object.keys(alternativesOptimalValuedNumbers).length / itemsPerPage
+          Object.keys(normalizedWeightedMatrix).length / itemsPerPage
         )}
         page={currentPage}
         onChange={handlePageChange}

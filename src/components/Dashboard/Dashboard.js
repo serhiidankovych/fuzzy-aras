@@ -13,6 +13,7 @@ import CriteriaIntervalValued from "./IntervalValuedTransformer/CriteriaInterval
 import AlternativesIntervalValued from "./IntervalValuedTransformer/AlternativesIntervalValued";
 import CriteriaOptimalValued from "./OptimalValuedTransformer/CriteriaOptimalValued";
 import AlternativesOptimalValued from "./OptimalValuedTransformer/AlternativesOptimalValued";
+import NormalizedWeightedMatrix from "./NormalizedWeightedMatrix/NormalizedWeightedMatrix";
 
 export default function Dashboard() {
   const [isSetupOpen, setIsSetupOpen] = React.useState(false);
@@ -34,6 +35,8 @@ export default function Dashboard() {
     alternativesOptimalValuedNumbers,
     setAlternativesOptimalValuedNumbers,
   ] = React.useState([]);
+  const [normalizedWeightedMatrix, setNormalizedWeightedMatrix] =
+    React.useState([]);
 
   const handleDisplaySetup = () => {
     setIsSetupOpen((prev) => !prev);
@@ -57,6 +60,7 @@ export default function Dashboard() {
               setAlternativesOptimalValuedNumbers={
                 setAlternativesOptimalValuedNumbers
               }
+              setNormalizedWeightedMatrix={setNormalizedWeightedMatrix}
               setIsResultsShown={setIsResultsShown}
             />
             {isResultsShown && (
@@ -80,6 +84,9 @@ export default function Dashboard() {
                   alternativesOptimalValuedNumbers={
                     alternativesOptimalValuedNumbers
                   }
+                />
+                <NormalizedWeightedMatrix
+                  normalizedWeightedMatrix={normalizedWeightedMatrix}
                 />
               </>
             )}

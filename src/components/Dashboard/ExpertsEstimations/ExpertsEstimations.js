@@ -35,6 +35,7 @@ export default function ExpertsEstimations({
   setAlternativesIntervalValuedNumbers,
   setCriteriaOptimalValuedNumbers,
   setAlternativesOptimalValuedNumbers,
+  setNormalizedWeightedMatrix,
   setIsResultsShown,
 }) {
   const alternativesLinguisticTerms = useSelector(
@@ -107,21 +108,19 @@ export default function ExpertsEstimations({
     dispatch(setExpertsEstimationConfiguration(selectedItems));
 
     const aggregatedEstimations = aggregateEstimations(selectedItems);
-
     setAggregatedEstimations(aggregatedEstimations);
 
-    setCriteriaIntervalValuedNumbers(
-      getCriteriaIntervalValuedNumbers(
-        criteriaEstimation.criteriaEstimation,
-        names.expertIndices.length
-      )
+    const criteriaIntervalValuedNumbers = getCriteriaIntervalValuedNumbers(
+      criteriaEstimation.criteriaEstimation,
+      names.expertIndices.length
     );
+    setCriteriaIntervalValuedNumbers(criteriaIntervalValuedNumbers);
+
     const alternativesIntervalValuedNumbers =
       getAlternativesIntervalValuedNumbers(
         aggregateEstimations(selectedItems),
         names.expertIndices.length
       );
-
     setAlternativesIntervalValuedNumbers(alternativesIntervalValuedNumbers);
 
     const criteriaOptimalValuedNumbers = getCriteriaOptimalValue(
@@ -135,9 +134,34 @@ export default function ExpertsEstimations({
       criteriaOptimalValuedNumbers,
       maxMin.maxMin
     );
-
     setAlternativesOptimalValuedNumbers(alternativesOptimalValuedNumbers);
+
+    const normalizedWeightedMatrix = getNormalizedWeightedMatrix(
+      criteriaIntervalValuedNumbers,
+      alternativesOptimalValuedNumbers
+    );
+    setNormalizedWeightedMatrix(normalizedWeightedMatrix);
+
     setIsResultsShown(true);
+  };
+
+  const getNormalizedWeightedMatrix = (
+    criteriaIntervalValuedNumbers,
+    normalizedMatrix
+  ) => {
+    const normalizedWeightedMatrix = {};
+
+    for (const key in normalizedMatrix) {
+      const subArrays = normalizedMatrix[key];
+      const elementsNormalizedWeighted = subArrays.map((subArray) => {
+        return subArray.map((element, index) => {
+          return element * criteriaIntervalValuedNumbers[key][index];
+        });
+      });
+
+      normalizedWeightedMatrix[key] = elementsNormalizedWeighted;
+    }
+    return normalizedWeightedMatrix;
   };
 
   const handleSelectChange = (event, id) => {
