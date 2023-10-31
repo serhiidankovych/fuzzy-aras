@@ -15,13 +15,11 @@ import {
 
 import { useDispatch, useSelector } from "react-redux";
 
-import { IoChevronDown, IoChevronUp } from "react-icons/io5";
+import { IoTrendingUp, IoTrendingDown } from "react-icons/io5";
 export default function CriteriaOptimalValued({
   criteriaOptimalValuedNumbers,
 }) {
-  const criteriaEstimation = useSelector(
-    (state) => state.criteriaEstimationConfiguration
-  );
+  const maxMin = useSelector((state) => state.maxMinConfiguration);
 
   const names = useSelector((state) => state.nameConfiguration);
 
@@ -43,6 +41,9 @@ export default function CriteriaOptimalValued({
           {criteriaOptimalValuedNumbers[itemId][criteriaIndex].toFixed(2)}
         </TableCell>
       ))}
+      <TableCell align="center">
+        {maxMin.maxMin[itemId] == "Max" ? <IoTrendingUp /> : <IoTrendingDown />}
+      </TableCell>
     </TableRow>
   ));
 
@@ -60,7 +61,7 @@ export default function CriteriaOptimalValued({
         marginTop: "20px",
       }}
     >
-      <Typography variant="h5">Criteria optimal-valued</Typography>
+      <Typography variant="h5">Criteria optimal-valued numbers</Typography>
 
       <Box
         sx={{
@@ -84,6 +85,7 @@ export default function CriteriaOptimalValued({
                   {criteriaName}
                 </TableCell>
               ))}
+              <TableCell align="center">Optimization</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>{MenuItemsOptimalValuedNumbers}</TableBody>

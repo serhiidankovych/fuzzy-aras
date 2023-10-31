@@ -112,19 +112,19 @@ export default function NumberConfiguration({
           [...generatedExpertsNames]
         )
       );
-    }
 
-    dispatch(setMaxMinConfiguration(generatedMaxMin));
+      dispatch(setMaxMinConfiguration(generatedMaxMin));
 
-    dispatch(
-      setExpertsEstimationConfiguration(
-        generateExpertEstimations(
-          numberOfExperts,
-          numberOfAlternatives,
-          numberOfCriteria
+      dispatch(
+        setExpertsEstimationConfiguration(
+          generateExpertEstimations(
+            numberOfExperts,
+            numberOfAlternatives,
+            numberOfCriteria
+          )
         )
-      )
-    );
+      );
+    }
 
     handleSetupStep(true);
   };

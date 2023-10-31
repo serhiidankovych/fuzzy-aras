@@ -26,6 +26,7 @@ import {
   aggregateEstimations,
   getAlternativesIntervalValuedNumbers,
   getCriteriaOptimalValue,
+  getAlternativesOptimalValue,
 } from "../../../utils/expertEstimations";
 
 export default function ExpertsEstimations({
@@ -33,6 +34,7 @@ export default function ExpertsEstimations({
   setCriteriaIntervalValuedNumbers,
   setAlternativesIntervalValuedNumbers,
   setCriteriaOptimalValuedNumbers,
+  setAlternativesOptimalValuedNumbers,
   setIsResultsShown,
 }) {
   const alternativesLinguisticTerms = useSelector(
@@ -56,36 +58,38 @@ export default function ExpertsEstimations({
   const [selectedItems, setSelectedItems] = React.useState(
     expertsEstimations.expertsEstimation || {}
   );
+  const [alternativesOptimalValue, setAlternativesOptimalValue] =
+    React.useState({});
 
   React.useEffect(() => {
     setLinguisticTerms(alternativesLinguisticTerms.alternativeLinguisticTerms);
   }, [alternativesLinguisticTerms]);
+  //change on click
+  // React.useEffect(() => {
+  //   // Create a map of linguisticTerm IDs to linguisticTerm objects
+  //   const linguisticTermsMap = new Map(
+  //     linguisticTerms.map((term) => [term.id, term])
+  //   );
 
-  React.useEffect(() => {
-    // Create a map of linguisticTerm IDs to linguisticTerm objects
-    const linguisticTermsMap = new Map(
-      linguisticTerms.map((term) => [term.id, term])
-    );
+  //   // Iterate over selectedItems and update the linguisticTerm based on the updated linguisticTerms
+  //   const updatedSelectedItems = Object.fromEntries(
+  //     Object.entries(selectedItems).map(([itemId, currentItem]) => {
+  //       const updatedOption = linguisticTermsMap.get(currentItem.data.id);
 
-    // Iterate over selectedItems and update the linguisticTerm based on the updated linguisticTerms
-    const updatedSelectedItems = Object.fromEntries(
-      Object.entries(selectedItems).map(([itemId, currentItem]) => {
-        const updatedOption = linguisticTermsMap.get(currentItem.data.id);
+  //       return [
+  //         itemId,
+  //         {
+  //           data: updatedOption,
+  //           alternative: currentItem.alternative,
+  //           criteria: currentItem.criteria,
+  //           expertId: currentItem.expertId,
+  //         },
+  //       ];
+  //     })
+  //   );
 
-        return [
-          itemId,
-          {
-            data: updatedOption,
-            alternative: currentItem.alternative,
-            criteria: currentItem.criteria,
-            expertId: currentItem.expertId,
-          },
-        ];
-      })
-    );
-
-    setSelectedItems(updatedSelectedItems);
-  }, [linguisticTerms]);
+  //   setSelectedItems(updatedSelectedItems);
+  // }, [linguisticTerms]);
 
   const dispatch = useDispatch();
   const itemsPerPage = 1;
@@ -117,12 +121,22 @@ export default function ExpertsEstimations({
         aggregateEstimations(selectedItems),
         names.expertIndices.length
       );
+
     setAlternativesIntervalValuedNumbers(alternativesIntervalValuedNumbers);
 
-    setCriteriaOptimalValuedNumbers(
-      getCriteriaOptimalValue(alternativesIntervalValuedNumbers, maxMin.maxMin)
+    const criteriaOptimalValuedNumbers = getCriteriaOptimalValue(
+      alternativesIntervalValuedNumbers,
+      maxMin.maxMin
+    );
+    setCriteriaOptimalValuedNumbers(criteriaOptimalValuedNumbers);
+
+    const alternativesOptimalValuedNumbers = getAlternativesOptimalValue(
+      alternativesIntervalValuedNumbers,
+      criteriaOptimalValuedNumbers,
+      maxMin.maxMin
     );
 
+    setAlternativesOptimalValuedNumbers(alternativesOptimalValuedNumbers);
     setIsResultsShown(true);
   };
 

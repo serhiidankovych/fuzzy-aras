@@ -27,18 +27,29 @@ import {
   transformToTriangleForm,
 } from "../../../utils/linguisticTerms";
 
-export default function CriteriaConfiguration({
-  handleSetupStep,
-  
-}) {
+export default function CriteriaConfiguration({ handleSetupStep }) {
   const generatedCriteriaLinguisticTerms = useSelector(
     (state) => state.criteriaConfiguration
   );
+  const names = useSelector((state) => state.nameConfiguration);
+
   const dispatch = useDispatch();
 
   const [criteria, setCriteria] = React.useState(
     generatedCriteriaLinguisticTerms.criteriaLinguisticTerms || []
   );
+
+  React.useEffect(() => {
+    const updatedCriteria = criteria.map((criterion, index) => {
+      // Create a new object with updated linguisticTerm property
+      return {
+        ...criterion, // Copy existing properties of criterion
+        linguisticTerm: names.linguisticTermsForCriteriaNames[index],
+      };
+    });
+    console.log(updatedCriteria);
+    setCriteria(updatedCriteria);
+  }, [names]);
 
   useEffect(() => {
     transformToTriangleForm(criteria, setCriteria);

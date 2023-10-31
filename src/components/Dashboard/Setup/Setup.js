@@ -38,14 +38,35 @@ export default function Setup({
           isDatasetNotUsed={isDatasetNotUsed}
         />
       ),
-      1: <NamesConfiguration handleSetupStep={handleSetupStep} />,
-      2: <MaxMinConfiguration handleSetupStep={handleSetupStep} />,
-      3: <AlternativeConfiguration handleSetupStep={handleSetupStep} />,
-      4: <CriteriaConfiguration handleSetupStep={handleSetupStep} />,
+      1: (
+        <NamesConfiguration
+          handleSetupStep={handleSetupStep}
+          isDatasetNotUsed={isDatasetNotUsed}
+        />
+      ),
+      2: (
+        <MaxMinConfiguration
+          handleSetupStep={handleSetupStep}
+          isDatasetNotUsed={isDatasetNotUsed}
+        />
+      ),
+      3: (
+        <AlternativeConfiguration
+          handleSetupStep={handleSetupStep}
+          isDatasetNotUsed={isDatasetNotUsed}
+        />
+      ),
+      4: (
+        <CriteriaConfiguration
+          handleSetupStep={handleSetupStep}
+          isDatasetNotUsed={isDatasetNotUsed}
+        />
+      ),
       5: (
         <CriteriaEstimationConfiguration
           handleSetupStep={handleSetupStep}
           setIsSetupFinised={setIsSetupFinised}
+          isDatasetNotUsed={isDatasetNotUsed}
         />
       ),
     };

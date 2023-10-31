@@ -107,13 +107,13 @@ export default function MaxMinConfiguration({ handleSetupStep }) {
         gap: "8px",
       }}
     >
-      <Typography variant="h6">Provide max/min</Typography>
+      <Typography variant="h6">Provide optimization</Typography>
       <TableContainer sx={{ border: "1px solid #d5d5d5", borderRadius: "8px" }}>
         <Table>
           <TableHead>
             <TableRow>
               <TableCell align="center">Criteria</TableCell>
-              <TableCell align="center">Max/Min</TableCell>
+              <TableCell align="center">Optimization</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>{MenuItems}</TableBody>

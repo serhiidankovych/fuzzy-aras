@@ -22,7 +22,6 @@ export default function AlternativesIntervalValued({
   alternativesIntervalValuedNumbers,
   aggregatedEstimations,
 }) {
-  console.log(alternativesIntervalValuedNumbers);
   const criteriaEstimation = useSelector(
     (state) => state.criteriaEstimationConfiguration
   );

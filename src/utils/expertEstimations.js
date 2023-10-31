@@ -262,10 +262,91 @@ const getCriteriaOptimalValue = (alternativesIntervalValuedNumbers, maxMin) => {
   return criteriaOptimalValues;
 };
 
+const getAlternativesOptimalValue = (
+  alternativesIntervalValuedNumbers,
+  criteriaOptimalValuedNumbers,
+  maxMin
+) => {
+  const alternativesValues = {};
+  Object.keys(alternativesIntervalValuedNumbers).forEach((itemId) => {
+    const currentItem = alternativesIntervalValuedNumbers[itemId];
+    const [_, criteriaKey] = itemId.split("-");
+
+    alternativesValues[criteriaKey] = alternativesValues[criteriaKey] || [];
+    alternativesValues[criteriaKey].push(currentItem);
+  });
+
+  Object.keys(alternativesValues).forEach((itemId) => {
+    const currentItem = alternativesValues[itemId];
+    currentItem.unshift(criteriaOptimalValuedNumbers[itemId]);
+  });
+
+  const sumLastElements = {};
+
+  for (const key in alternativesValues) {
+    const subArrays = alternativesValues[key];
+    const lastElementsSum = subArrays.reduce((acc, subArray) => {
+      const lastElement = subArray[subArray.length - 1];
+      return acc + lastElement;
+    }, 0);
+    sumLastElements[key] = lastElementsSum;
+  }
+  const reversedAlternativesValues = {};
+
+  for (const key in alternativesValues) {
+    const subArrays = alternativesValues[key];
+    const elementsReversed = subArrays.map((subArray) => {
+      return subArray.map((element) => {
+        return 1 / element;
+      });
+    });
+
+    reversedAlternativesValues[key] = elementsReversed;
+  }
+
+  const sumFirstElements = {};
+  for (const key in reversedAlternativesValues) {
+    const subArrays = reversedAlternativesValues[key];
+    const firstElementsSum = subArrays.reduce((acc, subArray) => {
+      const firstElement = subArray[0];
+      return acc + firstElement;
+    }, 0);
+    sumFirstElements[key] = firstElementsSum;
+  }
+
+  const normalizedValues = {};
+
+  for (const key in alternativesValues) {
+    let subArrays =
+      maxMin[key] === "Max"
+        ? alternativesValues[key]
+        : reversedAlternativesValues[key];
+
+    const elementsNormalized = subArrays.map((subArray) => {
+      return subArray.map((element) => {
+        const divisor =
+          maxMin[key] === "Max" ? sumLastElements[key] : sumFirstElements[key];
+        return element / divisor;
+      });
+    });
+
+    normalizedValues[key] = elementsNormalized;
+  }
+
+  // console.log(alternativesValues);
+  // console.log(reversedAlternativesValues);
+  // console.log(normalizedValues);
+  // console.log(sumLastElements);
+  // console.log(sumFirstElements);
+
+  return normalizedValues;
+};
+
 export {
   generateExpertEstimations,
   getCriteriaIntervalValuedNumbers,
   getAlternativesIntervalValuedNumbers,
   aggregateEstimations,
   getCriteriaOptimalValue,
+  getAlternativesOptimalValue,
 };
