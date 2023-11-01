@@ -17,6 +17,7 @@ import NormalizedWeightedMatrix from "./NormalizedWeightedMatrix/NormalizedWeigh
 import PerformanceRatings from "./PerformanceRatings/PerformanceRatings";
 import Defuzzification from "./Defuzzification/Defuzzification";
 import UtilityDegree from "./UtilityDegree/UtilityDegree";
+import Rank from "./Rank/Rank";
 
 export default function Dashboard() {
   const [isSetupOpen, setIsSetupOpen] = React.useState(false);
@@ -99,6 +100,7 @@ export default function Dashboard() {
                 <PerformanceRatings performanceRatings={performanceRatings} />
                 <Defuzzification defuzzification={defuzzification} />
                 <UtilityDegree utilityDegree={utilityDegree} />
+                <Rank utilityDegree={utilityDegree} />
               </>
             )}
           </>
