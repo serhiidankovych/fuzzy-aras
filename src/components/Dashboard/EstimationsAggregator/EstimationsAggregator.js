@@ -28,8 +28,9 @@ export default function EstimationsAggregator({ aggregatedEstimations }) {
         (criteriaName, criteriaIndex) => {
           const itemId = `a${alternativeIndex + 1}-c${criteriaIndex + 1}`;
           const linguisticTerms = aggregatedEstimations[itemId]?.data?.map(
-            (estimation) => (
+            (estimation, estimationIndex) => (
               <div
+                key={estimationIndex}
                 style={{
                   textAlign: "center",
                   padding: "5px",
@@ -73,8 +74,9 @@ export default function EstimationsAggregator({ aggregatedEstimations }) {
         (criteriaName, criteriaIndex) => {
           const itemId = `a${alternativeIndex + 1}-c${criteriaIndex + 1}`;
           const normalizedConfines = aggregatedEstimations[itemId]?.data?.map(
-            (estimation) => (
+            (estimation, index) => (
               <div
+                key={`${alternativeIndex}-${criteriaIndex}-${index}`}
                 style={{
                   textAlign: "center",
                 }}
@@ -90,7 +92,7 @@ export default function EstimationsAggregator({ aggregatedEstimations }) {
 
           return (
             <TableCell
-              key={criteriaIndex}
+              key={`${alternativeIndex}-${criteriaIndex}`}
               align="center"
               sx={{ minWidth: "115px" }}
             >

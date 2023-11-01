@@ -13,36 +13,35 @@ import {
   Button,
   TablePagination,
   Pagination,
+  Select,
+  MenuItem,
+  FormControl,
 } from "@mui/material";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import { IoChevronDown, IoChevronUp } from "react-icons/io5";
-import { BsConeStriped } from "react-icons/bs";
-export default function PerformanceRatings({ performanceRatings }) {
+export default function UtilityDegree({ utilityDegree }) {
   const names = useSelector((state) => state.nameConfiguration);
 
-  const [criteriaIntervalValuedNames, setCriteriaIntervalValuedNames] =
-    React.useState(["Criteria👑", ...names.criteriaNames]);
+  const [alternativesUtilityDegreeNames, setalternativesUtilityDegreeNames] =
+    React.useState(["Alternative👑", ...names.alternativeNames]);
 
   React.useEffect(() => {
-    setCriteriaIntervalValuedNames(["Criteria👑", ...names.criteriaNames]);
+    setalternativesUtilityDegreeNames([
+      "Alternative👑",
+      ...names.alternativeNames,
+    ]);
   }, [names]);
-
-  const MenuItemsConfines = names.alternativeNames.map(
+  const MenuItemsConfines = alternativesUtilityDegreeNames.map(
     (alternativeName, alternativeIndex) => {
       const itemId = `a${alternativeIndex + 1}`;
 
-      const ratings = performanceRatings[itemId]?.map((estimation, index) => (
-        <TableCell align="center" key={index}>
-          {estimation.toFixed(2)}
-        </TableCell>
-      ));
+      const ratings = utilityDegree[itemId].toFixed(4);
 
       return (
         <TableRow key={alternativeIndex}>
           <TableCell align="center">{alternativeName}</TableCell>
-          {ratings}
+          <TableCell align="center">{ratings}</TableCell>
         </TableRow>
       );
     }
@@ -62,32 +61,13 @@ export default function PerformanceRatings({ performanceRatings }) {
         marginTop: "20px",
       }}
     >
-      <Typography variant="h5">Overall performance ratings</Typography>
-
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: "8px",
-          flexWrap: "wrap",
-          paddingLeft: "8px",
-        }}
-      ></Box>
-
+      <Typography variant="h5"> Utility Degree</Typography>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
               <TableCell align="center">Alternatives</TableCell>
-
-              {criteriaIntervalValuedNames.map(
-                (criteriaName, criteriaIndex) => (
-                  <TableCell align="center" key={criteriaIndex}>
-                    {criteriaName}
-                  </TableCell>
-                )
-              )}
+              <TableCell align="center">Crisp values</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>{MenuItemsConfines}</TableBody>

@@ -15,6 +15,8 @@ import CriteriaOptimalValued from "./OptimalValuedTransformer/CriteriaOptimalVal
 import AlternativesOptimalValued from "./OptimalValuedTransformer/AlternativesOptimalValued";
 import NormalizedWeightedMatrix from "./NormalizedWeightedMatrix/NormalizedWeightedMatrix";
 import PerformanceRatings from "./PerformanceRatings/PerformanceRatings";
+import Defuzzification from "./Defuzzification/Defuzzification";
+import UtilityDegree from "./UtilityDegree/UtilityDegree";
 
 export default function Dashboard() {
   const [isSetupOpen, setIsSetupOpen] = React.useState(false);
@@ -39,7 +41,8 @@ export default function Dashboard() {
   const [normalizedWeightedMatrix, setNormalizedWeightedMatrix] =
     React.useState([]);
   const [performanceRatings, setPerformanceRatings] = React.useState([]);
-
+  const [defuzzification, setDefuzzification] = React.useState({});
+  const [utilityDegree, setUtilityDegree] = React.useState({});
   const handleDisplaySetup = () => {
     setIsSetupOpen((prev) => !prev);
   };
@@ -64,6 +67,8 @@ export default function Dashboard() {
               }
               setNormalizedWeightedMatrix={setNormalizedWeightedMatrix}
               setPerformanceRatings={setPerformanceRatings}
+              setDefuzzification={setDefuzzification}
+              setUtilityDegree={setUtilityDegree}
               setIsResultsShown={setIsResultsShown}
             />
             {isResultsShown && (
@@ -92,6 +97,8 @@ export default function Dashboard() {
                   normalizedWeightedMatrix={normalizedWeightedMatrix}
                 />
                 <PerformanceRatings performanceRatings={performanceRatings} />
+                <Defuzzification defuzzification={defuzzification} />
+                <UtilityDegree utilityDegree={utilityDegree} />
               </>
             )}
           </>

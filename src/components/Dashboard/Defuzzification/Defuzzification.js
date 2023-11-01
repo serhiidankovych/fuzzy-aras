@@ -13,40 +13,52 @@ import {
   Button,
   TablePagination,
   Pagination,
+  Select,
+  MenuItem,
+  FormControl,
 } from "@mui/material";
 
 import { useDispatch, useSelector } from "react-redux";
 
 import { IoChevronDown, IoChevronUp } from "react-icons/io5";
 import { BsConeStriped } from "react-icons/bs";
-export default function PerformanceRatings({ performanceRatings }) {
+export default function Defuzzification({ defuzzification }) {
   const names = useSelector((state) => state.nameConfiguration);
+  console.log(defuzzification);
 
-  const [criteriaIntervalValuedNames, setCriteriaIntervalValuedNames] =
-    React.useState(["Criteria👑", ...names.criteriaNames]);
+  const [
+    alternativesDefuzzificationNames,
+    setalternativesDefuzzificationNames,
+  ] = React.useState(["Alternative👑", ...names.alternativeNames]);
 
   React.useEffect(() => {
-    setCriteriaIntervalValuedNames(["Criteria👑", ...names.criteriaNames]);
+    setalternativesDefuzzificationNames([
+      "Alternative👑",
+      ...names.alternativeNames,
+    ]);
   }, [names]);
-
-  const MenuItemsConfines = names.alternativeNames.map(
+  const MenuItemsConfines = alternativesDefuzzificationNames.map(
     (alternativeName, alternativeIndex) => {
       const itemId = `a${alternativeIndex + 1}`;
 
-      const ratings = performanceRatings[itemId]?.map((estimation, index) => (
-        <TableCell align="center" key={index}>
-          {estimation.toFixed(2)}
-        </TableCell>
-      ));
+      const ratings = defuzzification[itemId].toFixed(4);
 
       return (
         <TableRow key={alternativeIndex}>
           <TableCell align="center">{alternativeName}</TableCell>
-          {ratings}
+          <TableCell align="center">{ratings}</TableCell>
         </TableRow>
       );
     }
   );
+
+  const [defuzzificationMethod, setDefuzzificationMethod] = React.useState(
+    "Weighted Average Method"
+  );
+
+  const handleChange = (event) => {
+    setDefuzzificationMethod(event.target.value);
+  };
 
   return (
     <Box
@@ -62,32 +74,26 @@ export default function PerformanceRatings({ performanceRatings }) {
         marginTop: "20px",
       }}
     >
-      <Typography variant="h5">Overall performance ratings</Typography>
+      <Typography variant="h5"> Defuzzification</Typography>
 
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: "8px",
-          flexWrap: "wrap",
-          paddingLeft: "8px",
-        }}
-      ></Box>
+      <FormControl sx={{ m: 1, minWidth: 120 }}>
+        <Select
+          value={defuzzificationMethod}
+          onChange={handleChange}
+          displayEmpty
+        >
+          <MenuItem value={"Weighted Average Method"}>
+            Weighted Average Method
+          </MenuItem>
+        </Select>
+      </FormControl>
 
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
               <TableCell align="center">Alternatives</TableCell>
-
-              {criteriaIntervalValuedNames.map(
-                (criteriaName, criteriaIndex) => (
-                  <TableCell align="center" key={criteriaIndex}>
-                    {criteriaName}
-                  </TableCell>
-                )
-              )}
+              <TableCell align="center">Crisp values</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>{MenuItemsConfines}</TableBody>

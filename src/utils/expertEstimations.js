@@ -355,6 +355,49 @@ const getNormalizedWeightedMatrix = (
   return normalizedWeightedMatrix;
 };
 
+const getPerfomanceRatings = (normalizedWeightedMatrix) => {
+  const keys = Object.keys(normalizedWeightedMatrix);
+  const numberOfSubarrays = normalizedWeightedMatrix[keys[0]].length;
+  const sameAlternatives = [];
+
+  for (let i = 0; i < numberOfSubarrays; i++) {
+    const subarray = keys.map((key) => normalizedWeightedMatrix[key][i]);
+    sameAlternatives.push(subarray);
+  }
+
+  const perfomanceRatings = {};
+  sameAlternatives.forEach((subarray, index) => {
+    const resultSum = subarray.reduce((a, b) => a.map((c, i) => c + b[i]));
+    perfomanceRatings[`a${index + 1}`] = resultSum;
+  });
+
+  return perfomanceRatings;
+};
+
+const getWeightedAverageDefuzzification = (perfomanceRatings) => {
+  console.log(perfomanceRatings);
+  const defuzzifiedRatings = {};
+  for (const key in perfomanceRatings) {
+    const subArrays = perfomanceRatings[key];
+    const defuzzifiedRating = subArrays.reduce((accumulator, currentValue) => {
+      return accumulator + currentValue;
+    }, 0);
+
+    defuzzifiedRatings[key] = defuzzifiedRating / 5;
+  }
+  return defuzzifiedRatings;
+};
+
+const getUtilityDegree = (defuzzifiedRatings) => {
+  const UtilityDegrees = {};
+
+  const optimalValue = defuzzifiedRatings["a1"];
+  Object.keys(defuzzifiedRatings).forEach((key) => {
+    UtilityDegrees[key] = defuzzifiedRatings[key] / optimalValue;
+  });
+
+  return UtilityDegrees;
+};
 export {
   generateExpertEstimations,
   getCriteriaIntervalValuedNumbers,
@@ -363,4 +406,7 @@ export {
   getCriteriaOptimalValue,
   getAlternativesOptimalValue,
   getNormalizedWeightedMatrix,
+  getPerfomanceRatings,
+  getWeightedAverageDefuzzification,
+  getUtilityDegree,
 };

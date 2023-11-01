@@ -78,8 +78,9 @@ export default function AlternativesIntervalValued({
         (criteriaName, criteriaIndex) => {
           const itemId = `a${alternativeIndex + 1}-c${criteriaIndex + 1}`;
           const normalizedConfines = aggregatedEstimations[itemId]?.data?.map(
-            (estimation) => (
+            (estimation, estimationIndex) => (
               <div
+                key={estimationIndex}
                 style={{
                   textAlign: "center",
                 }}

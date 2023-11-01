@@ -28,6 +28,9 @@ import {
   getCriteriaOptimalValue,
   getAlternativesOptimalValue,
   getNormalizedWeightedMatrix,
+  getPerfomanceRatings,
+  getWeightedAverageDefuzzification,
+  getUtilityDegree,
 } from "../../../utils/expertEstimations";
 
 export default function ExpertsEstimations({
@@ -38,6 +41,8 @@ export default function ExpertsEstimations({
   setAlternativesOptimalValuedNumbers,
   setNormalizedWeightedMatrix,
   setPerformanceRatings,
+  setDefuzzification,
+  setUtilityDegree,
   setIsResultsShown,
 }) {
   const alternativesLinguisticTerms = useSelector(
@@ -143,29 +148,17 @@ export default function ExpertsEstimations({
       alternativesOptimalValuedNumbers
     );
     setNormalizedWeightedMatrix(normalizedWeightedMatrix);
-    // setPerformanceRatings
+
     const perfomanceRatings = getPerfomanceRatings(normalizedWeightedMatrix);
     setPerformanceRatings(perfomanceRatings);
     setIsResultsShown(true);
-  };
 
-  const getPerfomanceRatings = (normalizedWeightedMatrix) => {
-    const keys = Object.keys(normalizedWeightedMatrix);
-    const numberOfSubarrays = normalizedWeightedMatrix[keys[0]].length;
-    const sameAlternatives = [];
+    const defuzzifiedRatings =
+      getWeightedAverageDefuzzification(perfomanceRatings);
+    setDefuzzification(defuzzifiedRatings);
 
-    for (let i = 0; i < numberOfSubarrays; i++) {
-      const subarray = keys.map((key) => normalizedWeightedMatrix[key][i]);
-      sameAlternatives.push(subarray);
-    }
-
-    const perfomanceRatings = {};
-    sameAlternatives.forEach((subarray, index) => {
-      const resultSum = subarray.reduce((a, b) => a.map((c, i) => c + b[i]));
-      perfomanceRatings[`a${index + 1}`] = resultSum;
-    });
-
-    return perfomanceRatings;
+    const utilityDegree = getUtilityDegree(defuzzifiedRatings);
+    setUtilityDegree(utilityDegree);
   };
 
   const handleSelectChange = (event, id) => {
