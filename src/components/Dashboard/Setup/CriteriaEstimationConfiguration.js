@@ -69,9 +69,7 @@ export default function CriteriaEstimationConfiguration({
   const currentExpert = names.expertIndices.slice(startIndex, endIndex);
 
   const handleSetCriteriaEstimations = () => {
-    // if (isDatasetNotUsed) {
-
-    // }
+   
     dispatch(setCriteriaEstimationConfiguration(selectedItems));
     setIsSetupFinised(true);
   };

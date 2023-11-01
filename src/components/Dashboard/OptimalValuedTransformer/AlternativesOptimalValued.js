@@ -68,7 +68,7 @@ export default function AlternativesOptimalValued({
         </TableCell>
         {subArray.map((element, columnIndex) => (
           <TableCell align="center" key={columnIndex}>
-            {element.toFixed(5)}
+            {element.toFixed(4)}
           </TableCell>
         ))}
       </TableRow>

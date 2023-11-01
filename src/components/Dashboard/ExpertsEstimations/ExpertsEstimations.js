@@ -27,6 +27,7 @@ import {
   getAlternativesIntervalValuedNumbers,
   getCriteriaOptimalValue,
   getAlternativesOptimalValue,
+  getNormalizedWeightedMatrix,
 } from "../../../utils/expertEstimations";
 
 export default function ExpertsEstimations({
@@ -36,6 +37,7 @@ export default function ExpertsEstimations({
   setCriteriaOptimalValuedNumbers,
   setAlternativesOptimalValuedNumbers,
   setNormalizedWeightedMatrix,
+  setPerformanceRatings,
   setIsResultsShown,
 }) {
   const alternativesLinguisticTerms = useSelector(
@@ -59,8 +61,8 @@ export default function ExpertsEstimations({
   const [selectedItems, setSelectedItems] = React.useState(
     expertsEstimations.expertsEstimation || {}
   );
-  const [alternativesOptimalValue, setAlternativesOptimalValue] =
-    React.useState({});
+  // const [alternativesOptimalValue, setAlternativesOptimalValue] =
+  //   React.useState({});
 
   React.useEffect(() => {
     setLinguisticTerms(alternativesLinguisticTerms.alternativeLinguisticTerms);
@@ -141,27 +143,29 @@ export default function ExpertsEstimations({
       alternativesOptimalValuedNumbers
     );
     setNormalizedWeightedMatrix(normalizedWeightedMatrix);
-
+    // setPerformanceRatings
+    const perfomanceRatings = getPerfomanceRatings(normalizedWeightedMatrix);
+    setPerformanceRatings(perfomanceRatings);
     setIsResultsShown(true);
   };
 
-  const getNormalizedWeightedMatrix = (
-    criteriaIntervalValuedNumbers,
-    normalizedMatrix
-  ) => {
-    const normalizedWeightedMatrix = {};
+  const getPerfomanceRatings = (normalizedWeightedMatrix) => {
+    const keys = Object.keys(normalizedWeightedMatrix);
+    const numberOfSubarrays = normalizedWeightedMatrix[keys[0]].length;
+    const sameAlternatives = [];
 
-    for (const key in normalizedMatrix) {
-      const subArrays = normalizedMatrix[key];
-      const elementsNormalizedWeighted = subArrays.map((subArray) => {
-        return subArray.map((element, index) => {
-          return element * criteriaIntervalValuedNumbers[key][index];
-        });
-      });
-
-      normalizedWeightedMatrix[key] = elementsNormalizedWeighted;
+    for (let i = 0; i < numberOfSubarrays; i++) {
+      const subarray = keys.map((key) => normalizedWeightedMatrix[key][i]);
+      sameAlternatives.push(subarray);
     }
-    return normalizedWeightedMatrix;
+
+    const perfomanceRatings = {};
+    sameAlternatives.forEach((subarray, index) => {
+      const resultSum = subarray.reduce((a, b) => a.map((c, i) => c + b[i]));
+      perfomanceRatings[`a${index + 1}`] = resultSum;
+    });
+
+    return perfomanceRatings;
   };
 
   const handleSelectChange = (event, id) => {

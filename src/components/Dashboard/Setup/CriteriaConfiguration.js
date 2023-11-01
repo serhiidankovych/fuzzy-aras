@@ -39,17 +39,7 @@ export default function CriteriaConfiguration({ handleSetupStep }) {
     generatedCriteriaLinguisticTerms.criteriaLinguisticTerms || []
   );
 
-  React.useEffect(() => {
-    const updatedCriteria = criteria.map((criterion, index) => {
-      // Create a new object with updated linguisticTerm property
-      return {
-        ...criterion, // Copy existing properties of criterion
-        linguisticTerm: names.linguisticTermsForCriteriaNames[index],
-      };
-    });
-    console.log(updatedCriteria);
-    setCriteria(updatedCriteria);
-  }, [names]);
+
 
   useEffect(() => {
     transformToTriangleForm(criteria, setCriteria);

@@ -333,13 +333,26 @@ const getAlternativesOptimalValue = (
     normalizedValues[key] = elementsNormalized;
   }
 
-  //
-  //
-  //
-  //
-  //
-
   return normalizedValues;
+};
+
+const getNormalizedWeightedMatrix = (
+  criteriaIntervalValuedNumbers,
+  normalizedMatrix
+) => {
+  const normalizedWeightedMatrix = {};
+
+  for (const key in normalizedMatrix) {
+    const subArrays = normalizedMatrix[key];
+    const elementsNormalizedWeighted = subArrays.map((subArray) => {
+      return subArray.map((element, index) => {
+        return element * criteriaIntervalValuedNumbers[key][index];
+      });
+    });
+
+    normalizedWeightedMatrix[key] = elementsNormalizedWeighted;
+  }
+  return normalizedWeightedMatrix;
 };
 
 export {
@@ -349,4 +362,5 @@ export {
   aggregateEstimations,
   getCriteriaOptimalValue,
   getAlternativesOptimalValue,
+  getNormalizedWeightedMatrix,
 };
