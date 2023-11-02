@@ -29,7 +29,17 @@ export default function PerformanceRatings({ performanceRatings }) {
     setCriteriaIntervalValuedNames(["Criteria👑", ...names.criteriaNames]);
   }, [names]);
 
-  const MenuItemsConfines = names.alternativeNames.map(
+  const [alternativesPerfomanceNames, setalternativesPerfomanceNames] =
+    React.useState(["Alternative👑", ...names.alternativeNames]);
+
+  React.useEffect(() => {
+    setalternativesPerfomanceNames([
+      "Alternative👑",
+      ...names.alternativeNames,
+    ]);
+  }, [names]);
+
+  const MenuItemsConfines = alternativesPerfomanceNames.map(
     (alternativeName, alternativeIndex) => {
       const itemId = `a${alternativeIndex + 1}`;
 

@@ -21,13 +21,7 @@ import { IoChevronDown, IoChevronUp } from "react-icons/io5";
 export default function AlternativesOptimalValued({
   alternativesOptimalValuedNumbers,
 }) {
-  const criteriaEstimation = useSelector(
-    (state) => state.criteriaEstimationConfiguration
-  );
-
   const names = useSelector((state) => state.nameConfiguration);
-
-  const [isDetailsShown, setIsDetailsShown] = React.useState(false);
 
   const [alternativesOptimalValuedNames, setAlternativesOptimalValuedNames] =
     React.useState(["Alternative👑", ...names.alternativeNames]);

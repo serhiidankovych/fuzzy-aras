@@ -25,8 +25,6 @@ export default function NormalizedWeightedMatrix({ normalizedWeightedMatrix }) {
 
   const names = useSelector((state) => state.nameConfiguration);
 
-  const [isDetailsShown, setIsDetailsShown] = React.useState(false);
-
   const [alternativesOptimalValuedNames, setAlternativesOptimalValuedNames] =
     React.useState(["Alternative👑", ...names.alternativeNames]);
 

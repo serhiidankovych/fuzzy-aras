@@ -29,12 +29,6 @@ export default function AlternativesIntervalValued({
   const names = useSelector((state) => state.nameConfiguration);
 
   const [isDetailsShown, setIsDetailsShown] = React.useState(false);
-  const [criteriaIntervalValuedNames, setCriteriaIntervalValuedNames] =
-    React.useState(["Criteria👑", ...names.criteriaNames]);
-
-  React.useEffect(() => {
-    setCriteriaIntervalValuedNames(["Criteria👑", ...names.criteriaNames]);
-  }, [names]);
 
   const itemsPerPage = names.criteriaNames.length;
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -48,21 +42,22 @@ export default function AlternativesIntervalValued({
 
   const MenuItemsIntervalValuedNumbers = Object.keys(
     alternativesIntervalValuedNumbers
-  ).map((itemId, itemIndex) => {
-    const criteriaNameKey = itemId.charAt(4);
+  ).map((alternativeKey, index) => {
+    const currentItem = alternativesIntervalValuedNumbers[alternativeKey];
+    const [, criteriaKey] = alternativeKey.split("-")[1];
+
+    const intervalValued = currentItem.map((estimation, index) => (
+      <TableCell align="center" key={index}>
+        {estimation.toFixed(2)}
+      </TableCell>
+    ));
 
     return (
-      <TableRow key={itemIndex}>
+      <TableRow key={index}>
         <TableCell align="center">
-          {names.criteriaNames[criteriaNameKey - 1]}
+          {names.criteriaNames[criteriaKey - 1]}
         </TableCell>
-        {criteriaIntervalValuedNames.map((criteriaName, criteriaIndex) => (
-          <TableCell align="center" key={criteriaIndex}>
-            {alternativesIntervalValuedNumbers[itemId][criteriaIndex].toFixed(
-              2
-            )}
-          </TableCell>
-        ))}
+        {intervalValued}
       </TableRow>
     );
   });
@@ -146,7 +141,7 @@ export default function AlternativesIntervalValued({
       </Typography>
       <TableContainer component={Paper}>
         <Table>
-          <TableHead>
+          {/* <TableHead>
             <TableRow>
               <TableCell align="center">Criteria</TableCell>
 
@@ -158,7 +153,7 @@ export default function AlternativesIntervalValued({
                 )
               )}
             </TableRow>
-          </TableHead>
+          </TableHead> */}
           <TableBody>{slicedMenuItems}</TableBody>
         </Table>
       </TableContainer>

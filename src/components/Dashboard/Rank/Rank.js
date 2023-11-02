@@ -25,16 +25,6 @@ import { IoArrowBack } from "react-icons/io5";
 export default function Rank({ utilityDegree }) {
   const names = useSelector((state) => state.nameConfiguration);
 
-  const [alternativesUtilityDegreeNames, setalternativesUtilityDegreeNames] =
-    React.useState(["Alternative👑", ...names.alternativeNames]);
-
-  React.useEffect(() => {
-    setalternativesUtilityDegreeNames([
-      "Alternative👑",
-      ...names.alternativeNames,
-    ]);
-  }, [names]);
-
   const dataArray = Object.entries(utilityDegree);
 
   // Sort the array based on the numerical values

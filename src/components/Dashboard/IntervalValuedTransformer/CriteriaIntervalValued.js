@@ -26,12 +26,6 @@ export default function CriteriaIntervalValued({
   const names = useSelector((state) => state.nameConfiguration);
 
   const [isDetailsShown, setIsDetailsShown] = React.useState(false);
-  const [criteriaIntervalValuedNames, setCriteriaIntervalValuedNames] =
-    React.useState(["Criteria👑", ...names.criteriaNames]);
-
-  React.useEffect(() => {
-    setCriteriaIntervalValuedNames(["Criteria👑", ...names.criteriaNames]);
-  }, [names]);
 
   const MenuItemsCriteriaEstimation = names.expertNames.map(
     (expertName, expertIndex) => {
@@ -65,18 +59,26 @@ export default function CriteriaIntervalValued({
     }
   );
 
-  const MenuItemsIntervalValuedNumbers = Object.keys(
-    criteriaIntervalValuedNumbers
-  ).map((itemId, itemIndex) => (
-    <TableRow key={itemIndex}>
-      <TableCell align="center">{names.criteriaNames[itemIndex]}</TableCell>
-      {criteriaIntervalValuedNames.map((criteriaName, criteriaIndex) => (
-        <TableCell align="center" key={criteriaIndex}>
-          {criteriaIntervalValuedNumbers[itemId][criteriaIndex].toFixed(2)}
-        </TableCell>
-      ))}
-    </TableRow>
-  ));
+  const MenuItemsIntervalValuedNumbers = names.criteriaNames.map(
+    (criteriaName, criteriaIndex) => {
+      const itemId = `c${criteriaIndex + 1}`;
+
+      const intervalValued = criteriaIntervalValuedNumbers[itemId]?.map(
+        (estimation, index) => (
+          <TableCell align="center" key={index}>
+            {estimation.toFixed(2)}
+          </TableCell>
+        )
+      );
+
+      return (
+        <TableRow key={criteriaIndex}>
+          <TableCell align="center">{criteriaName}</TableCell>
+          {intervalValued}
+        </TableRow>
+      );
+    }
+  );
 
   return (
     <Box
@@ -109,15 +111,15 @@ export default function CriteriaIntervalValued({
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell align="center">Criteria</TableCell>
+              {/* <TableCell align="center">Criteria</TableCell> */}
 
-              {criteriaIntervalValuedNames.map(
+              {/* {criteriaIntervalValuedNames.map(
                 (criteriaName, criteriaIndex) => (
                   <TableCell align="center" key={criteriaIndex}>
                     {criteriaName}
                   </TableCell>
                 )
-              )}
+              )} */}
             </TableRow>
           </TableHead>
           <TableBody>{MenuItemsIntervalValuedNumbers}</TableBody>

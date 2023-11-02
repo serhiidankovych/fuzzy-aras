@@ -23,30 +23,34 @@ export default function CriteriaOptimalValued({
 
   const names = useSelector((state) => state.nameConfiguration);
 
-  const [isDetailsShown, setIsDetailsShown] = React.useState(false);
-  const [criteriaOptimalValuedNames, setCriteriaOptimalValuedNames] =
-    React.useState(["Criteria👑", ...names.criteriaNames]);
+  const MenuItemsOptimalValuedNumbers = names.criteriaNames.map(
+    (criteriaName, criteriaIndex) => {
+      const itemId = `c${criteriaIndex + 1}`;
 
-  React.useEffect(() => {
-    setCriteriaOptimalValuedNames(["Criteria👑", ...names.criteriaNames]);
-    console.log("useeffect");
-  }, [names]);
+      const optimalValued = criteriaOptimalValuedNumbers[itemId]?.map(
+        (estimation, index) => (
+          <TableCell align="center" key={index}>
+            {estimation.toFixed(2)}
+          </TableCell>
+        )
+      );
 
-  const MenuItemsOptimalValuedNumbers = Object.keys(
-    criteriaOptimalValuedNumbers
-  ).map((itemId, itemIndex) => (
-    <TableRow key={itemIndex}>
-      <TableCell align="center">{names.criteriaNames[itemIndex]}</TableCell>
-      {criteriaOptimalValuedNames.map((criteriaName, criteriaIndex) => (
-        <TableCell align="center" key={criteriaIndex}>
-          {criteriaOptimalValuedNumbers[itemId][criteriaIndex].toFixed(2)}
-        </TableCell>
-      ))}
-      <TableCell align="center">
-        {maxMin.maxMin[itemId] == "Max" ? <IoTrendingUp /> : <IoTrendingDown />}
-      </TableCell>
-    </TableRow>
-  ));
+      return (
+        <TableRow key={criteriaIndex}>
+          <TableCell align="center">{criteriaName}</TableCell>
+          {optimalValued}
+
+          <TableCell align="center">
+            {maxMin.maxMin[itemId] == "Max" ? (
+              <IoTrendingUp />
+            ) : (
+              <IoTrendingDown />
+            )}
+          </TableCell>
+        </TableRow>
+      );
+    }
+  );
 
   return (
     <Box
@@ -77,18 +81,6 @@ export default function CriteriaOptimalValued({
 
       <TableContainer component={Paper}>
         <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell align="center">Criteria</TableCell>
-
-              {criteriaOptimalValuedNames.map((criteriaName, criteriaIndex) => (
-                <TableCell align="center" key={criteriaIndex}>
-                  {criteriaName}
-                </TableCell>
-              ))}
-              <TableCell align="center">Optimization</TableCell>
-            </TableRow>
-          </TableHead>
           <TableBody>{MenuItemsOptimalValuedNumbers}</TableBody>
         </Table>
       </TableContainer>

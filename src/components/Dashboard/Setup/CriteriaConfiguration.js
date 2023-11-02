@@ -58,6 +58,7 @@ export default function CriteriaConfiguration({ handleSetupStep }) {
         key={index}
       >
         <TextField
+          InputProps={{ inputProps: { min: "0", max: "1000", step: "0.5" } }}
           id={`${nameType}${index + 1}-left`}
           label={`${linguisticTerm.linguisticTerm}`}
           key={`${nameType}-${index}-left`}
@@ -75,6 +76,7 @@ export default function CriteriaConfiguration({ handleSetupStep }) {
           }
         />
         <TextField
+          InputProps={{ inputProps: { min: "0", max: "1000", step: "0.5" } }}
           id={`${nameType}${index + 1}`}
           key={`${nameType}-${index}-middle`}
           variant="outlined"
@@ -91,6 +93,7 @@ export default function CriteriaConfiguration({ handleSetupStep }) {
           }
         />
         <TextField
+          InputProps={{ inputProps: { min: "0", max: "1000", step: "0.5" } }}
           id={`${nameType}${index + 1}-right`}
           key={`${nameType}-${index}-right`}
           variant="outlined"

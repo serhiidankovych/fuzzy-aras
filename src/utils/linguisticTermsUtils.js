@@ -104,19 +104,25 @@ const handleLinguisticTermsChange = (
   linguisticTerms,
   setLinguisticTerms
 ) => {
-  const updatedLinguisticTerms = [...linguisticTerms];
+  let processedValue = Number(value);
 
+  if (processedValue > 1000) {
+    processedValue = 1000;
+  }
+
+  const updatedLinguisticTerms = [...linguisticTerms];
   updatedLinguisticTerms[index] = {
     ...updatedLinguisticTerms[index],
     confines: [
       ...updatedLinguisticTerms[index].confines.slice(0, confinesIndex),
-      value === "" ? "" : Number(value),
+      processedValue === "" ? "" : processedValue,
       ...updatedLinguisticTerms[index].confines.slice(confinesIndex + 1),
     ],
   };
 
   setLinguisticTerms(transformToTriangleForm(updatedLinguisticTerms));
 };
+
 const generateTriangularValues = (numTerms, x) => {
   const step = x / (numTerms - 1);
   const values = [];
