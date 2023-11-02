@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { isValidElement, useEffect } from "react";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -20,10 +20,11 @@ import { IoArrowForward, IoArrowBackOutline } from "react-icons/io5";
 
 import { useDispatch, useSelector } from "react-redux";
 import { setCriteriaEstimationConfiguration } from "../../../store/actions/criteriaEstimationConfigurationActions";
-
+import { showToastMessage } from "../../../utils/toastUtils";
 export default function CriteriaEstimationConfiguration({
   handleSetupStep,
   setIsSetupFinised,
+  setIsSetupOpen,
 }) {
   const dispatch = useDispatch();
   const criteriaEstimation = useSelector(
@@ -69,12 +70,32 @@ export default function CriteriaEstimationConfiguration({
   const currentExpert = names.expertIndices.slice(startIndex, endIndex);
 
   const handleSetCriteriaEstimations = () => {
-   
-    dispatch(setCriteriaEstimationConfiguration(selectedItems));
-    setIsSetupFinised(true);
+    const isValid = checkCriteriaEstimations(
+      selectedItems,
+      names,
+      showToastMessage
+    );
+    if (isValid) {
+      dispatch(setCriteriaEstimationConfiguration(selectedItems));
+      setIsSetupFinised(true);
+      setIsSetupOpen(false);
+    }
   };
   const handlePageChange = (event, newPage) => {
     setCurrentPage(newPage);
+  };
+
+  const checkCriteriaEstimations = (selectedItems, names, showToastMessage) => {
+    if (
+      Object.keys(selectedItems).length ===
+      names.expertNames.length * names.criteriaNames.length
+    ) {
+      return true;
+    } else {
+      showToastMessage("Please provide all criteria estimations", "error");
+
+      return false;
+    }
   };
 
   const handleSelectChange = (event, id) => {

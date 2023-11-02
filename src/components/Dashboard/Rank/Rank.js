@@ -34,7 +34,6 @@ export default function Rank({ utilityDegree }) {
       ...names.alternativeNames,
     ]);
   }, [names]);
-  console.log(utilityDegree);
 
   const dataArray = Object.entries(utilityDegree);
 
@@ -42,11 +41,10 @@ export default function Rank({ utilityDegree }) {
   dataArray.sort((a, b) => b[1] - a[1]);
 
   dataArray.shift();
-  console.log(dataArray);
+
   const sortedObject = Object.fromEntries(dataArray);
   const [, alternativeIndex] = dataArray[1][0].split("");
-  console.log(alternativeIndex);
-  console.log(alternativesUtilityDegreeNames);
+
   return (
     <Box
       component={Paper}
@@ -66,25 +64,29 @@ export default function Rank({ utilityDegree }) {
         component={Paper}
         sx={{
           p: 1.5,
-          border: "1px solid #d5d5d5",
+          border: "1px solid  #d5d5d5",
+          backgroundColor: "#ebebeb",
           borderRadius: "8px",
           display: "flex",
           flexDirection: "row",
           gap: "8px",
           alignItems: "center",
-          marginTop: "20px",
         }}
       >
         {dataArray.map((item, index) => {
-          const [, alternativeKey] = item[0].split(""); // Assuming item[0] is a string
-          console.log(alternativeKey - 2);
+          const [, alternativeKey] = item[0].split("");
+
           return (
-            <>
-              <div key={`${index}-${alternativeKey - 2}`}>
-                {names.alternativeNames[alternativeKey - 2]}
-              </div>
-              {dataArray[index + 1] && <IoArrowBack />}
-            </>
+            <div key={`${index}`}>
+              {names.alternativeNames[alternativeKey - 2]}{" "}
+              {dataArray[index + 1] ? (
+                dataArray[index][1] === dataArray[index + 1][1] ? (
+                  "="
+                ) : (
+                  <IoArrowBack />
+                )
+              ) : null}
+            </div>
           );
         })}
       </Box>

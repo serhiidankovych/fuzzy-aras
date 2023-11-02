@@ -61,7 +61,7 @@ export default function UtilityDegree({ utilityDegree }) {
         marginTop: "20px",
       }}
     >
-      <Typography variant="h5"> Utility Degree</Typography>
+      <Typography variant="h5"> Utility degree</Typography>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>

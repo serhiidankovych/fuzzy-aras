@@ -31,7 +31,7 @@ import {
   getPerfomanceRatings,
   getWeightedAverageDefuzzification,
   getUtilityDegree,
-} from "../../../utils/expertEstimations";
+} from "../../../utils/expertEstimationsUtils";
 
 export default function ExpertsEstimations({
   setAggregatedEstimations,
@@ -54,7 +54,7 @@ export default function ExpertsEstimations({
   const expertsEstimations = useSelector(
     (state) => state.expertsEstimationConfiguration
   );
-  //update in change
+
   const criteriaEstimation = useSelector(
     (state) => state.criteriaEstimationConfiguration
   );
@@ -66,38 +66,14 @@ export default function ExpertsEstimations({
   const [selectedItems, setSelectedItems] = React.useState(
     expertsEstimations.expertsEstimation || {}
   );
-  // const [alternativesOptimalValue, setAlternativesOptimalValue] =
-  //   React.useState({});
 
   React.useEffect(() => {
     setLinguisticTerms(alternativesLinguisticTerms.alternativeLinguisticTerms);
   }, [alternativesLinguisticTerms]);
-  //change on click
-  // React.useEffect(() => {
-  //   // Create a map of linguisticTerm IDs to linguisticTerm objects
-  //   const linguisticTermsMap = new Map(
-  //     linguisticTerms.map((term) => [term.id, term])
-  //   );
 
-  //   // Iterate over selectedItems and update the linguisticTerm based on the updated linguisticTerms
-  //   const updatedSelectedItems = Object.fromEntries(
-  //     Object.entries(selectedItems).map(([itemId, currentItem]) => {
-  //       const updatedOption = linguisticTermsMap.get(currentItem.data.id);
-
-  //       return [
-  //         itemId,
-  //         {
-  //           data: updatedOption,
-  //           alternative: currentItem.alternative,
-  //           criteria: currentItem.criteria,
-  //           expertId: currentItem.expertId,
-  //         },
-  //       ];
-  //     })
-  //   );
-
-  //   setSelectedItems(updatedSelectedItems);
-  // }, [linguisticTerms]);
+  React.useEffect(() => {
+    setSelectedItems(expertsEstimations.expertsEstimation);
+  }, [expertsEstimations]);
 
   const dispatch = useDispatch();
   const itemsPerPage = 1;

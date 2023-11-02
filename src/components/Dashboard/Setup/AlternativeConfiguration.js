@@ -20,19 +20,23 @@ import {
 
 import { useDispatch, useSelector } from "react-redux";
 import { setAlternativeConfiguration } from "../../../store/actions/alternativeConfigurationActions";
+import { setExpertsEstimationConfiguration } from "../../../store/actions/expertsEstimationConfigurationActions";
 
 import {
   generateContrastColor,
   handleLinguisticTermsChange,
   transformToTriangleForm,
-} from "../../../utils/linguisticTerms";
+  checkLinguisticTermsConfines,
+} from "../../../utils/linguisticTermsUtils";
 
-export default function AlternativeConfiguration({
-  handleSetupStep,
- 
-}) {
+import { showToastMessage } from "../../../utils/toastUtils";
+
+export default function AlternativeConfiguration({ handleSetupStep }) {
   const generatedAlternativeLinguisticTerms = useSelector(
     (state) => state.alternativeConfiguration
+  );
+  const expertsEstimation = useSelector(
+    (state) => state.expertsEstimationConfiguration
   );
   const dispatch = useDispatch();
 
@@ -41,13 +45,44 @@ export default function AlternativeConfiguration({
   );
 
   useEffect(() => {
-    transformToTriangleForm(alternative, setAlternative);
+    setAlternative(transformToTriangleForm(alternative));
   }, []);
 
-
   const handleSetAlternative = () => {
-    dispatch(setAlternativeConfiguration(alternative));
-    handleSetupStep(true);
+    const isValid = checkLinguisticTermsConfines(alternative, showToastMessage);
+
+    if (isValid) {
+      dispatch(setAlternativeConfiguration(alternative));
+      updateLinguisticTerms(expertsEstimation.expertsEstimation, alternative);
+      handleSetupStep(true);
+    }
+  };
+
+  const updateLinguisticTerms = (expertsEstimation, linguisticTerms) => {
+    const linguisticTermsTransformed = transformToTriangleForm(alternative);
+
+    const linguisticTermsMap = new Map(
+      linguisticTermsTransformed.map((term) => [term.id, term])
+    );
+
+    const updatedExpertsEstimations = Object.keys(expertsEstimation).reduce(
+      (result, estimation) => {
+        const currentEstimation = expertsEstimation[estimation];
+        const updatedOption = linguisticTermsMap.get(currentEstimation.data.id);
+
+        result[estimation] = {
+          data: updatedOption,
+          alternative: currentEstimation.alternative,
+          criteria: currentEstimation.criteria,
+          expertId: currentEstimation.expertId,
+        };
+
+        return result;
+      },
+      {}
+    );
+
+    dispatch(setExpertsEstimationConfiguration(updatedExpertsEstimations));
   };
 
   const renderInputs = (alternative, nameType) => {

@@ -28,14 +28,10 @@ export default function AlternativesOptimalValued({
   const names = useSelector((state) => state.nameConfiguration);
 
   const [isDetailsShown, setIsDetailsShown] = React.useState(false);
-  const [criteriaOptimalValuedNames, setCriteriaOptimalValuedNames] =
-    React.useState(["Criteria👑", ...names.criteriaNames]);
+
   const [alternativesOptimalValuedNames, setAlternativesOptimalValuedNames] =
     React.useState(["Alternative👑", ...names.alternativeNames]);
 
-  React.useEffect(() => {
-    setCriteriaOptimalValuedNames(["Criteria👑", ...names.criteriaNames]);
-  }, [names]);
   React.useEffect(() => {
     setAlternativesOptimalValuedNames([
       "Alternative👑",
@@ -74,14 +70,13 @@ export default function AlternativesOptimalValued({
       </TableRow>
     ));
 
-    return elementsReversed; // Make sure to return the components to render
+    return elementsReversed;
   });
 
   const slicedMenuItems = MenuItemsOptimalValuedNumbers.slice(
     startIndex,
     endIndex
   );
-  //   const slicedMenuItems = MenuItemsOptimalValuedNumbers;
 
   return (
     <Box
@@ -114,17 +109,6 @@ export default function AlternativesOptimalValued({
       </Typography>
       <TableContainer component={Paper}>
         <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell align="center">Alternatives</TableCell>
-
-              {criteriaOptimalValuedNames.map((criteriaName, criteriaIndex) => (
-                <TableCell align="center" key={criteriaIndex}>
-                  {criteriaName}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
           <TableBody>{slicedMenuItems}</TableBody>
         </Table>
       </TableContainer>

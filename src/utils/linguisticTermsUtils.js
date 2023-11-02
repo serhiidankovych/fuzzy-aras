@@ -1,4 +1,4 @@
-const transformToTriangleForm = (linguisticTerms, setLinguisticTerms) => {
+const transformToTriangleForm = (linguisticTerms) => {
   let minTriangularNumber = Infinity; // Initialize with a high value
   let maxTriangularNumber = -Infinity; // Initialize with a low value
 
@@ -62,7 +62,7 @@ const transformToTriangleForm = (linguisticTerms, setLinguisticTerms) => {
     }
   );
 
-  setLinguisticTerms(triangularNumbersNormalized);
+  return triangularNumbersNormalized;
 };
 const normalizeValue = (value, minTriangularNumber, maxTriangularNumber) => {
   if (value === 0 && minTriangularNumber === 0 && maxTriangularNumber === 0) {
@@ -115,7 +115,7 @@ const handleLinguisticTermsChange = (
     ],
   };
 
-  transformToTriangleForm(updatedLinguisticTerms, setLinguisticTerms);
+  setLinguisticTerms(transformToTriangleForm(updatedLinguisticTerms));
 };
 const generateTriangularValues = (numTerms, x) => {
   const step = x / (numTerms - 1);
@@ -136,6 +136,34 @@ const generateTriangularValues = (numTerms, x) => {
 
   return values;
 };
+
+const checkLinguisticTermsConfines = (linguisticTerms, showToastMessage) => {
+  let isValid = true; // Assume all inputs are valid initially
+
+  linguisticTerms?.forEach((linguisticTerm) => {
+    if (linguisticTerm?.confines.length !== 3) {
+      showToastMessage(
+        "Wrong confines for " + linguisticTerm.linguisticTerm,
+        "error"
+      );
+      isValid = false;
+      return;
+    }
+  });
+  linguisticTerms?.forEach((linguisticTerm) => {
+    const confines = linguisticTerm?.confines;
+
+    if (!(confines[0] <= confines[1] && confines[1] <= confines[2])) {
+      showToastMessage(
+        "Wrong confines values for " + linguisticTerm.linguisticTerm,
+        "error"
+      );
+      isValid = false;
+    }
+  });
+
+  return isValid;
+};
 export {
   transformToTriangleForm,
   normalizeValue,
@@ -143,4 +171,5 @@ export {
   hue2rgb,
   handleLinguisticTermsChange,
   generateTriangularValues,
+  checkLinguisticTermsConfines,
 };

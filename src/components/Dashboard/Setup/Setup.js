@@ -17,6 +17,10 @@ export default function Setup({
   setIsSetupFinised,
   setIsDatasetNotUsed,
   isDatasetNotUsed,
+  setIsNumbersSet,
+  isNumbersSet,
+  setIsNamesSet,
+  isNamesSet,
 }) {
   const [setupStep, setSetupStep] = React.useState(0);
 
@@ -36,12 +40,16 @@ export default function Setup({
           setIsSetupFinised={setIsSetupFinised}
           setIsDatasetNotUsed={setIsDatasetNotUsed}
           isDatasetNotUsed={isDatasetNotUsed}
+          setIsNumbersSet={setIsNumbersSet}
+          setIsNamesSet={setIsNamesSet}
         />
       ),
       1: (
         <NamesConfiguration
           handleSetupStep={handleSetupStep}
           isDatasetNotUsed={isDatasetNotUsed}
+          setIsNamesSet={setIsNamesSet}
+          isNamesSet={isNamesSet}
         />
       ),
       2: (
@@ -67,6 +75,7 @@ export default function Setup({
           handleSetupStep={handleSetupStep}
           setIsSetupFinised={setIsSetupFinised}
           isDatasetNotUsed={isDatasetNotUsed}
+          setIsSetupOpen={setIsSetupOpen}
         />
       ),
     };

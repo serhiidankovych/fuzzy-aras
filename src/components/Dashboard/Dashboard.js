@@ -24,6 +24,8 @@ export default function Dashboard() {
   const [isSetupFinised, setIsSetupFinised] = React.useState(false);
   const [isDatasetNotUsed, setIsDatasetNotUsed] = React.useState(true);
   const [isResultsShown, setIsResultsShown] = React.useState(false);
+  const [isNumbersSet, setIsNumbersSet] = React.useState(false);
+  const [isNamesSet, setIsNamesSet] = React.useState(false);
 
   const [aggregatedEstimations, setAggregatedEstimations] = React.useState([]);
   const [criteriaIntervalValuedNumbers, setCriteriaIntervalValuedNumbers] =
@@ -47,6 +49,7 @@ export default function Dashboard() {
   const handleDisplaySetup = () => {
     setIsSetupOpen((prev) => !prev);
   };
+
   return (
     <>
       <Header handleDisplaySetup={handleDisplaySetup} />
@@ -112,6 +115,10 @@ export default function Dashboard() {
         isSetupOpen={isSetupOpen}
         setIsSetupOpen={setIsSetupOpen}
         setIsSetupFinised={setIsSetupFinised}
+        setIsNumbersSet={setIsNumbersSet}
+        isNumbersSet={isNumbersSet}
+        setIsNamesSet={setIsNamesSet}
+        isNamesSet={isNamesSet}
       />
       <Footer />
       <ToastContainer />

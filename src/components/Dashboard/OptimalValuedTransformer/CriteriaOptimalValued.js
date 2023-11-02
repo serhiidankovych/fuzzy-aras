@@ -29,6 +29,7 @@ export default function CriteriaOptimalValued({
 
   React.useEffect(() => {
     setCriteriaOptimalValuedNames(["Criteria👑", ...names.criteriaNames]);
+    console.log("useeffect");
   }, [names]);
 
   const MenuItemsOptimalValuedNumbers = Object.keys(

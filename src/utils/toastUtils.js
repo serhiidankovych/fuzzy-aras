@@ -22,4 +22,4 @@ const showToastMessage = (message, typeMessage) => {
   }
 };
 
-export default showToastMessage;
+export { showToastMessage };

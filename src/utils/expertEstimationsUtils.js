@@ -375,7 +375,6 @@ const getPerfomanceRatings = (normalizedWeightedMatrix) => {
 };
 
 const getWeightedAverageDefuzzification = (perfomanceRatings) => {
-  console.log(perfomanceRatings);
   const defuzzifiedRatings = {};
   for (const key in perfomanceRatings) {
     const subArrays = perfomanceRatings[key];

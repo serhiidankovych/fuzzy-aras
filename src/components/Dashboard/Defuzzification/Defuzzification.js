@@ -24,7 +24,6 @@ import { IoChevronDown, IoChevronUp } from "react-icons/io5";
 import { BsConeStriped } from "react-icons/bs";
 export default function Defuzzification({ defuzzification }) {
   const names = useSelector((state) => state.nameConfiguration);
-  console.log(defuzzification);
 
   const [
     alternativesDefuzzificationNames,

@@ -30,6 +30,8 @@ import {
 export default function DatasetConfiguration({
   setIsSetupFinised,
   setIsDatasetNotUsed,
+
+  setIsNamesSet,
 }) {
   const dispatch = useDispatch();
 
@@ -67,6 +69,7 @@ export default function DatasetConfiguration({
     dispatch(setMaxMinConfiguration(maxMin));
     setIsSetupFinised(true);
     setIsDatasetNotUsed(false);
+    setIsNamesSet(true);
   };
 
   return (

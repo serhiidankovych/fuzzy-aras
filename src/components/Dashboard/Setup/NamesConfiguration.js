@@ -18,11 +18,22 @@ import { setAlternativeConfiguration } from "../../../store/actions/alternativeC
 import { setExpertsEstimationConfiguration } from "../../../store/actions/expertsEstimationConfigurationActions";
 import { setCriteriaEstimationConfiguration } from "../../../store/actions/criteriaEstimationConfigurationActions";
 
-import { generateTriangularValues } from "../../../utils/linguisticTerms";
+import { generateTriangularValues } from "../../../utils/linguisticTermsUtils";
+import { showToastMessage } from "../../../utils/toastUtils";
+import {
+  checkNames,
+  generateLinguisticTerms,
+  updateCriteria,
+  updateAlternatives,
+  updateExpertsEstimations,
+  updateCriteriaEstimations,
+} from "../../../utils/namesUtils";
 
 export default function NamesConfiguration({
   handleSetupStep,
   isDatasetNotUsed,
+  setIsNamesSet,
+  isNamesSet,
 }) {
   const generatedNames = useSelector((state) => state.nameConfiguration);
   const [tab, setTab] = React.useState("1");
@@ -37,30 +48,6 @@ export default function NamesConfiguration({
   const criteriaEstimation = useSelector(
     (state) => state.criteriaEstimationConfiguration
   );
-
-  // React.useEffect(() => {
-  //   const updatedCriteria = criteria.criteriaLinguisticTerms.map(
-  //     (criterion, index) => {
-  //       // Create a new object with updated linguisticTerm property
-  //       return {
-  //         ...criterion, // Copy existing properties of criterion
-  //         linguisticTerm: names.linguisticTermsForCriteriaNames[index],
-  //       };
-  //     }
-  //   );
-  //   const updatedAlternatives = alternatives.alternativeLinguisticTerms.map(
-  //     (criterion, index) => {
-  //       // Create a new object with updated linguisticTerm property
-  //       return {
-  //         ...criterion, // Copy existing properties of criterion
-  //         linguisticTerm: names.linguisticTermsForAlternativesNames[index],
-  //       };
-  //     }
-  //   );
-  //
-  //   dispatch(setCriteriaConfiguration(updatedCriteria));
-  //   dispatch(setAlternativeConfiguration(updatedAlternatives));
-  // }, [names.linguisticTermsForCriteriaNames]);
 
   const handleTabChange = (event, newValue) => {
     setTab(newValue);
@@ -79,186 +66,110 @@ export default function NamesConfiguration({
   };
 
   const renderNameInputs = (nameArray, nameType, label) => {
-    return nameArray.map((name, index) => (
-      <TextField
-        id={`${label}${index + 1}`}
-        label={`${label}${index + 1}`}
-        key={`${label}-${index}`}
-        value={name}
-        variant="outlined"
-        type="text"
-        onChange={(event) =>
-          handleNameChange(nameType, index, event.target.value)
-        }
-      />
-    ));
-  };
-
-  const generateLinguisticTerms = (
-    names,
-    type,
-    key,
-    generatedTriangularValues
-  ) => {
-    const generatedLinguisticTerms = [];
-
-    for (let i = 0; i < names[key]?.length; i++) {
-      generatedLinguisticTerms.push({
-        id: i,
-        linguisticTerm: names[key][i],
-        confines: generatedTriangularValues[i],
-        type: type,
-      });
-    }
-
-    return generatedLinguisticTerms;
-  };
-
-  const updateLinguisticTerms = (
-    names,
-    type,
-    key,
-    generatedTriangularValues
-  ) => {
-    const generatedLinguisticTerms = [];
-
-    for (let i = 0; i < names[key]?.length; i++) {
-      generatedLinguisticTerms.push({
-        id: i,
-        linguisticTerm: names[key][i],
-        confines: generatedTriangularValues[i],
-        type: type,
-      });
-    }
-
-    return generatedLinguisticTerms;
+    return nameArray.map((name, index) => {
+      const error = name.length === 0;
+      return (
+        <TextField
+          inputProps={{ maxLength: 15 }}
+          required
+          error={error}
+          helperText={error && "Empty field"}
+          id={`${label}${index + 1}`}
+          label={`${label}${index + 1}`}
+          key={`${label}-${index}`}
+          value={name}
+          variant="outlined"
+          type="text"
+          onChange={(event) =>
+            handleNameChange(nameType, index, event.target.value)
+          }
+        />
+      );
+    });
   };
 
   const handleSetNames = () => {
-    const {
-      alternativeNames,
-      criteriaNames,
-      linguisticTermsForAlternativesNames,
-      linguisticTermsForCriteriaNames,
-      expertNames,
-    } = names;
-
-    const generatedCriteriaTriangularValues = generateTriangularValues(
-      names?.linguisticTermsForCriteriaNames?.length,
-      1
-    );
-    const generatedAlternativesTriangularValues = generateTriangularValues(
-      names?.linguisticTermsForAlternativesNames?.length,
-      1
-    );
-
-    const generatedCriteriaLinguisticTerms = generateLinguisticTerms(
-      names,
-      "lt-criteria",
-      "linguisticTermsForCriteriaNames",
-      generatedCriteriaTriangularValues
-    );
-
-    const generatedAlternativeLinguisticTerms = generateLinguisticTerms(
-      names,
-      "lt-alternative",
-      "linguisticTermsForAlternativesNames",
-      generatedAlternativesTriangularValues
-    );
-    setNames({
-      alternativeNames,
-      criteriaNames,
-      linguisticTermsForAlternativesNames,
-      linguisticTermsForCriteriaNames,
-      expertNames,
-    });
-    dispatch(
-      setNameConfiguration(
+    const isValid = checkNames(names, showToastMessage);
+    if (isValid) {
+      const {
         alternativeNames,
         criteriaNames,
         linguisticTermsForAlternativesNames,
         linguisticTermsForCriteriaNames,
-        expertNames
-      )
-    );
+        expertNames,
+      } = names;
 
-    if (isDatasetNotUsed) {
-      dispatch(setCriteriaConfiguration([...generatedCriteriaLinguisticTerms]));
+      const generatedCriteriaTriangularValues = generateTriangularValues(
+        names?.linguisticTermsForCriteriaNames?.length,
+        1
+      );
+      const generatedAlternativesTriangularValues = generateTriangularValues(
+        names?.linguisticTermsForAlternativesNames?.length,
+        1
+      );
 
+      const generatedCriteriaLinguisticTerms = generateLinguisticTerms(
+        names,
+        "lt-criteria",
+        "linguisticTermsForCriteriaNames",
+        generatedCriteriaTriangularValues
+      );
+
+      const generatedAlternativeLinguisticTerms = generateLinguisticTerms(
+        names,
+        "lt-alternative",
+        "linguisticTermsForAlternativesNames",
+        generatedAlternativesTriangularValues
+      );
+      setNames({
+        alternativeNames,
+        criteriaNames,
+        linguisticTermsForAlternativesNames,
+        linguisticTermsForCriteriaNames,
+        expertNames,
+      });
       dispatch(
-        setAlternativeConfiguration([...generatedAlternativeLinguisticTerms])
-      );
-    } else {
-      const updatedCriteria = criteria.criteriaLinguisticTerms.map(
-        (criterion, index) => {
-          // Create a new object with updated linguisticTerm property
-          return {
-            ...criterion, // Copy existing properties of criterion
-            linguisticTerm: names.linguisticTermsForCriteriaNames[index],
-          };
-        }
-      );
-      const updatedAlternatives = alternatives.alternativeLinguisticTerms.map(
-        (criterion, index) => {
-          // Create a new object with updated linguisticTerm property
-          return {
-            ...criterion, // Copy existing properties of criterion
-            linguisticTerm: names.linguisticTermsForAlternativesNames[index],
-          };
-        }
+        setNameConfiguration(
+          alternativeNames,
+          criteriaNames,
+          linguisticTermsForAlternativesNames,
+          linguisticTermsForCriteriaNames,
+          expertNames
+        )
       );
 
-      const updatedExpertsEstimations = Object.keys(
-        expertsEstimation.expertsEstimation
-      ).reduce((result, estimation) => {
-        const currentEstimation =
-          expertsEstimation.expertsEstimation[estimation];
-        const updatedData = {
-          ...currentEstimation.data,
-          linguisticTerm:
-            names.linguisticTermsForAlternativesNames[
-              currentEstimation.data.id
-            ],
-        };
+      if (isDatasetNotUsed) {
+        dispatch(
+          setCriteriaConfiguration([...generatedCriteriaLinguisticTerms])
+        );
 
-        result[estimation] = {
-          data: updatedData,
-        };
+        dispatch(
+          setAlternativeConfiguration([...generatedAlternativeLinguisticTerms])
+        );
 
-        return result;
-      }, {});
+        setIsNamesSet(true);
+      }
+      if (isNamesSet) {
+        const updatedCriteria = updateCriteria(criteria, names);
+        const updatedAlternatives = updateAlternatives(alternatives, names);
+        const updatedExpertsEstimations = updateExpertsEstimations(
+          expertsEstimation,
+          names
+        );
+        const updatedCriteriaEstimations = updateCriteriaEstimations(
+          criteriaEstimation,
+          names
+        );
 
-      const updatedCriteriaEstimations = {};
-
-      Object.keys(criteriaEstimation.criteriaEstimation).forEach(
-        (estimation) => {
-          const currentEstimation =
-            criteriaEstimation.criteriaEstimation[estimation];
-          const updatedLinguisticTerm =
-            names.linguisticTermsForCriteriaNames[currentEstimation.id];
-
-          updatedCriteriaEstimations[estimation] = {
-            ...currentEstimation,
-            linguisticTerm: updatedLinguisticTerm,
-          };
-        }
-      );
-
-      dispatch(setCriteriaConfiguration(updatedCriteria));
-      dispatch(setAlternativeConfiguration(updatedAlternatives));
-      dispatch(setExpertsEstimationConfiguration(updatedExpertsEstimations));
-      dispatch(setCriteriaEstimationConfiguration(updatedCriteriaEstimations));
+        dispatch(setCriteriaConfiguration(updatedCriteria));
+        dispatch(setAlternativeConfiguration(updatedAlternatives));
+        dispatch(setExpertsEstimationConfiguration(updatedExpertsEstimations));
+        dispatch(
+          setCriteriaEstimationConfiguration(updatedCriteriaEstimations)
+        );
+      }
+      handleSetupStep(true);
     }
-
-    // } else {
-    //   dispatch(setCriteriaConfiguration([...updatedCriteriaLinguisticTerms]));
-
-    //   dispatch(
-    //     setAlternativeConfiguration([...updatedAlternativeLinguisticTerms])
-    //   );
-    // }
-
-    handleSetupStep(true);
   };
 
   return (

@@ -25,7 +25,7 @@ import {
   generateContrastColor,
   handleLinguisticTermsChange,
   transformToTriangleForm,
-} from "../../../utils/linguisticTerms";
+} from "../../../utils/linguisticTermsUtils";
 
 export default function CriteriaConfiguration({ handleSetupStep }) {
   const generatedCriteriaLinguisticTerms = useSelector(
@@ -39,16 +39,11 @@ export default function CriteriaConfiguration({ handleSetupStep }) {
     generatedCriteriaLinguisticTerms.criteriaLinguisticTerms || []
   );
 
-
-
   useEffect(() => {
-    transformToTriangleForm(criteria, setCriteria);
+    setCriteria(transformToTriangleForm(criteria));
   }, []);
 
   const handleSetCriteria = () => {
-    // if (isDatasetNotUsed) {
-
-    // }
     dispatch(setCriteriaConfiguration(criteria));
     handleSetupStep(true);
   };

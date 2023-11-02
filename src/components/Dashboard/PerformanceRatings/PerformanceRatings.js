@@ -77,19 +77,6 @@ export default function PerformanceRatings({ performanceRatings }) {
 
       <TableContainer component={Paper}>
         <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell align="center">Alternatives</TableCell>
-
-              {criteriaIntervalValuedNames.map(
-                (criteriaName, criteriaIndex) => (
-                  <TableCell align="center" key={criteriaIndex}>
-                    {criteriaName}
-                  </TableCell>
-                )
-              )}
-            </TableRow>
-          </TableHead>
           <TableBody>{MenuItemsConfines}</TableBody>
         </Table>
       </TableContainer>

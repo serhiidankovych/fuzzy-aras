@@ -16,7 +16,7 @@ import { setNameConfiguration } from "../../../store/actions/nameConfigurationAc
 import { setMaxMinConfiguration } from "../../../store/actions/maxMinConfigurationActions";
 import { setExpertsEstimationConfiguration } from "../../../store/actions/expertsEstimationConfigurationActions";
 
-import { generateExpertEstimations } from "../../../utils/expertEstimations";
+import { generateExpertEstimations } from "../../../utils/expertEstimationsUtils";
 
 import { BsConeStriped } from "react-icons/bs";
 
@@ -25,6 +25,8 @@ export default function NumberConfiguration({
   setIsSetupFinised,
   setIsDatasetNotUsed,
   isDatasetNotUsed,
+  setIsNumbersSet,
+  setIsNamesSet,
 }) {
   const initialNumbers = useSelector((state) => state.numberConfiguration);
   const [numberOfAlternatives, setNumberOfAlternatives] = React.useState(
@@ -125,7 +127,8 @@ export default function NumberConfiguration({
         )
       );
     }
-
+    //if numbers set
+    setIsNumbersSet(true);
     handleSetupStep(true);
   };
 
@@ -145,6 +148,7 @@ export default function NumberConfiguration({
         <DatasetConfiguration
           setIsSetupFinised={setIsSetupFinised}
           setIsDatasetNotUsed={setIsDatasetNotUsed}
+          setIsNamesSet={setIsNamesSet}
         />
         <Typography variant="h6">Provide input numbers</Typography>
         <Box
